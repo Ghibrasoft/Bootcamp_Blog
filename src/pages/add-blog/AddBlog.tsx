@@ -1,4 +1,4 @@
-import { DatePicker, Form, Image, Input, Space } from "antd";
+import { DatePicker, Form, Image, Input } from "antd";
 import AddBlogStyles from "./AddBlog.module.scss";
 import {
     Button,
@@ -11,6 +11,7 @@ import { isMinTwoWords } from "../../utils/helpers/isMinTwoWords";
 import { isGeorgian } from "../../utils/helpers/isGeorgian";
 import uploadIcon from "/upload.svg";
 import arrowLeft from "/arrowLeft.svg";
+import { useState } from "react";
 
 const { Option } = Select;
 
@@ -25,8 +26,11 @@ const SELECT_OPTIONS = [
     'Figma'
 ]
 export default function AddBlog() {
+    const [form] = Form.useForm();
     const dispatch = useAppDispatch();
-
+    const authorVal = Form.useWatch('author', form);
+    const titleVal = Form.useWatch('title', form);
+    const descVal = Form.useWatch('description', form);
 
     const getBase64 = (file: File) => {
         return new Promise<string | ArrayBuffer | null>((resolve, reject) => {
@@ -57,6 +61,7 @@ export default function AddBlog() {
 
         }
     };
+
     return (
         <section className={AddBlogStyles.addblog_section}>
             <div className={AddBlogStyles.addblog_section_arrowLeft}>
@@ -73,6 +78,7 @@ export default function AddBlog() {
 
                 <div className={AddBlogStyles.addblog_section_content_formWrapper}>
                     <Form
+                        form={form}
                         className={AddBlogStyles.addblog_section_content_formWrapper_form}
                         name="add_blog"
                         layout="vertical"
@@ -123,35 +129,42 @@ export default function AddBlog() {
                                 className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item}
                                 name="author"
                                 label="ავტორი"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'შეავსეთ ველი',
-                                    },
-                                    {
-                                        min: 4,
-                                        message: 'მინიმუმ 4 სიმბოლო',
+                                // rules={[
+                                //     {
+                                //         required: true,
+                                //         message: 'შეავსეთ ველი',
+                                //     },
+                                //     {
+                                //         min: 4,
+                                //         message: 'მინიმუმ 4 სიმბოლო',
 
-                                    },
-                                    {
-                                        validator: (_, value) => {
-                                            if (value) {
-                                                // if (value.length < 4) {
-                                                //     return Promise.reject('მინიმუმ 4 სიმბოლო');
-                                                // }
-                                                if (!isMinTwoWords(value)) {
-                                                    return Promise.reject('მინიმუმ ორი სიტყვა');
-                                                }
-                                                if (!isGeorgian(value)) {
-                                                    return Promise.reject('მხოლოდ ქართული სიმბოლოები');
-                                                }
-                                                return Promise.resolve();
-                                            } else {
-                                                return Promise.reject('');
-                                            }
-                                        }
-                                    }
-                                ]}
+                                //     },
+                                //     {
+                                //         validator: (_, value) => {
+                                //             if (value) {
+                                //                 // if (value.length < 4) {
+                                //                 //     return Promise.reject('მინიმუმ 4 სიმბოლო');
+                                //                 // }
+                                //                 if (!isMinTwoWords(value)) {
+                                //                     return Promise.reject('მინიმუმ ორი სიტყვა');
+                                //                 }
+                                //                 if (!isGeorgian(value)) {
+                                //                     return Promise.reject('მხოლოდ ქართული სიმბოლოები');
+                                //                 }
+                                //                 return Promise.resolve();
+                                //             } else {
+                                //                 return Promise.reject('');
+                                //             }
+                                //         }
+                                //     }
+                                // ]}
+                                help={
+                                    <ul>
+                                        <li style={{ color: authorVal?.length > 4 ? 'var(--color-success)' : 'var(--color-error)' }}>მინიმუმ 4 სიმბოლო</li>
+                                        <li style={{ color: authorVal && isMinTwoWords(authorVal) ? 'var(--color-success)' : 'var(--color-error)' }}>მინიმუმ ორი სიტყვა</li>
+                                        <li style={{ color: isGeorgian(authorVal) ? 'var(--color-success)' : 'var(--color-error)' }}>მხოლოდ ქართული სიმბოლოები</li>
+                                    </ul>
+                                }
                             >
                                 <Input
                                     size="large"
@@ -163,13 +176,15 @@ export default function AddBlog() {
                                 className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item}
                                 name="title"
                                 label="სათაური"
-                                rules={[
-                                    {
-                                        required: true,
-                                        min: 2,
-                                        message: 'მინიმუმ 2 სიმბოლო'
-                                    }
-                                ]}
+                                // rules={[
+                                //     {
+                                //         required: true,
+                                //         min: 4,
+                                //         message: 'მინიმუმ 4 სიმბოლო'
+                                //     }
+                                // ]}
+                                help={<span style={{ color: titleVal?.length >= 4 ? 'var(--color-success)' : 'var(--color-error)' }}>მინიმუმ 4 სიმბოლო</span>}
+                                validateStatus={"success"}
                             >
                                 <Input
                                     size="large"
@@ -182,16 +197,18 @@ export default function AddBlog() {
                         <Form.Item
                             name="description"
                             label="აღწერა"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: ''
-                                },
-                                {
-                                    min: 2,
-                                    message: 'მინიმუმ 2 სიმბოლო'
-                                }
-                            ]}
+                            // rules={[
+                            //     {
+                            //         required: true,
+                            //         message: ''
+                            //     },
+                            //     {
+                            //         min: 4,
+                            //         message: 'მინიმუმ 4 სიმბოლო'
+                            //     }
+                            // ]}
+                            help={<span style={{ color: descVal?.length >= 4 ? 'var(--color-success)' : 'var(--color-error)' }}>მინიმუმ 2 სიმბოლო</span>}
+                            validateStatus={"success"}
                         >
                             <Input.TextArea
                                 size="large"
@@ -206,7 +223,10 @@ export default function AddBlog() {
                                 // hasFeedback
                                 name="publish_date"
                                 label="გამოქვეყნების თარიღი"
-                            // rules={[{ required: true, message: 'Please select date!' }]}
+                                // rules={[{ required: true, message: 'Please select date!' }]}
+                                rules={[
+                                    { required: true }
+                                ]}
                             >
                                 <DatePicker
                                     className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item_datepicker}
@@ -219,7 +239,10 @@ export default function AddBlog() {
                                 className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item}
                                 name="categories"
                                 label="კატეგორია"
-                            // rules={[{ required: true, message: 'Please select categories!', type: 'array' }]}
+                                // rules={[{ required: true, message: 'Please select categories!', type: 'array' }]}
+                                rules={[
+                                    { required: true }
+                                ]}
                             >
                                 <Select
                                     size="large"
@@ -242,7 +265,6 @@ export default function AddBlog() {
                         <Form.Item
                             name="email"
                             label="ელ-ფოსტა"
-                            rules={[{}]}
                         >
                             <Input
                                 size="large"
