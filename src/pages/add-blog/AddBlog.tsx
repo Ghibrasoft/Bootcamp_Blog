@@ -26,8 +26,17 @@ export default function AddBlog() {
     const dispatch = useAppDispatch();
 
 
+    const getBase64 = (file: File) => {
+        return new Promise<string | ArrayBuffer | null>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = (error) => reject(error);
+        });
+    };
+
     const normFile = (e: any) => {
-        console.log('Upload event:', e);
+        // console.log('Upload event:', e);
         if (Array.isArray(e)) {
             return e;
         }
@@ -35,9 +44,13 @@ export default function AddBlog() {
     };
 
     const onFinish = async (values: any) => {
-        console.log(values);
+        // console.log(values);
         try {
-            dispatch(addBlog(values))
+            const imageFile = values.image[0].originFileObj;
+            const imageBase64 = await getBase64(imageFile);
+            const formData = { ...values, image: imageBase64 };
+
+            dispatch(addBlog(formData));
         } catch (error) {
 
         }
@@ -60,18 +73,16 @@ export default function AddBlog() {
                         <Form.Item label="Upload photo">
                             <Form.Item
                                 name="image"
-                                valuePropName="fileList"
+                                valuePropName="image"
                                 getValueFromEvent={normFile}
                             // noStyle
                             // rules={[{}]}
                             >
                                 <Upload.Dragger
                                     multiple
-                                    name="images"
+                                    name="image"
                                     listType="picture"
-                                    // accept=".png, .jpeg, .jpg"
-                                    accept="image/"
-                                    // action=""
+                                    accept=".png, .jpeg, .jpg"
                                     beforeUpload={(file) => {
                                         // console.log(file);
                                         return false;

@@ -3,6 +3,7 @@ import axios from "axios";
 import { IAddBlogProps, IErrorResponse } from "../../../types/blogType";
 
 export const addBlog = createAsyncThunk<
+  any,
   IAddBlogProps,
   { rejectValue: IErrorResponse }
 >("blogs/addblog", async (blogData, { rejectWithValue }) => {

@@ -20,7 +20,7 @@ export interface IAddBlogProps {
   description: string;
   image: string;
   publish_date: string;
-  categories: ICategories[];
+  categories: string;
   author: string;
 }
 export interface IErrorResponse {
