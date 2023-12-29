@@ -59,7 +59,7 @@ export default function AddBlog() {
         <section className={AddBlogStyles.addblog_section}>
             <div className={AddBlogStyles.addblog_section_content}>
                 <div className={AddBlogStyles.addblog_section_content_title}>
-                    <h1>Add Blog</h1>
+                    <h1>ბლოგის დამატება</h1>
                 </div>
 
                 <div className={AddBlogStyles.addblog_section_content_formWrapper}>
@@ -67,10 +67,11 @@ export default function AddBlog() {
                         className={AddBlogStyles.addblog_section_content_formWrapper_form}
                         name="add_blog"
                         layout="vertical"
-                        // {...formItemLayout}
                         onFinish={onFinish}
+                    // {...formItemLayout}
                     >
-                        <Form.Item label="Upload photo">
+                        {/* upload photo */}
+                        <Form.Item label="ატვირთეთ ფოტო">
                             <Form.Item
                                 name="image"
                                 valuePropName="image"
@@ -89,23 +90,25 @@ export default function AddBlog() {
                                     }}
                                 >
                                     <div className="">
-                                        <span>Drag and drop file here or</span>
+                                        <span>ჩააგდეთ ფაილი აქ ან</span>
                                         <Button
                                             size="small"
                                             type="link"
                                             htmlType="button"
                                         >
-                                            Choose file
+                                            აირჩიეთ ფაილი
                                         </Button>
                                     </div>
                                 </Upload.Dragger>
                             </Form.Item>
                         </Form.Item>
 
-                        <Space>
+                        {/* group */}
+                        <div className={AddBlogStyles.addblog_section_content_formWrapper_form_group}>
                             <Form.Item
+                                className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item}
                                 name="author"
-                                label="Author"
+                                label="ავტორი"
                                 rules={[
                                     {
                                         required: true,
@@ -136,12 +139,16 @@ export default function AddBlog() {
                                     }
                                 ]}
                             >
-                                <Input placeholder="Enter author..." />
+                                <Input
+                                    size="large"
+                                    placeholder="Enter author..."
+                                />
                             </Form.Item>
 
                             <Form.Item
+                                className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item}
                                 name="title"
-                                label="Title"
+                                label="სათაური"
                                 rules={[
                                     {
                                         required: true,
@@ -150,13 +157,17 @@ export default function AddBlog() {
                                     }
                                 ]}
                             >
-                                <Input placeholder="Enter title..." />
+                                <Input
+                                    size="large"
+                                    placeholder="Enter title..."
+                                />
                             </Form.Item>
-                        </Space>
+                        </div>
 
+                        {/* description */}
                         <Form.Item
                             name="description"
-                            label="Description"
+                            label="აღწერა"
                             rules={[
                                 {
                                     required: true,
@@ -168,25 +179,36 @@ export default function AddBlog() {
                                 }
                             ]}
                         >
-                            <Input.TextArea placeholder="Enter description..." />
+                            <Input.TextArea
+                                size="large"
+                                placeholder="Enter description..."
+                            />
                         </Form.Item>
 
-                        <Space>
+                        {/* group */}
+                        <div className={AddBlogStyles.addblog_section_content_formWrapper_form_group}>
                             <Form.Item
-                                hasFeedback
+                                className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item}
+                                // hasFeedback
                                 name="publish_date"
-                                label="Select date"
+                                label="გამოქვეყნების თარიღი"
                             // rules={[{ required: true, message: 'Please select date!' }]}
                             >
-                                <DatePicker placeholder="Pick date..." />
+                                <DatePicker
+                                    className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item_datepicker}
+                                    size="large"
+                                    placeholder="Pick date..."
+                                />
                             </Form.Item>
 
                             <Form.Item
+                                className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item}
                                 name="categories"
-                                label="Categories"
+                                label="კატეგორია"
                             // rules={[{ required: true, message: 'Please select categories!', type: 'array' }]}
                             >
                                 <Select
+                                    size="large"
                                     mode="multiple"
                                     placeholder="Select categories"
                                 >
@@ -200,14 +222,18 @@ export default function AddBlog() {
                                     ))}
                                 </Select>
                             </Form.Item>
-                        </Space>
+                        </div>
 
+                        {/* email */}
                         <Form.Item
                             name="email"
-                            label="Email"
+                            label="ელ-ფოსტა"
                             rules={[{}]}
                         >
-                            <Input placeholder="Enter email..." />
+                            <Input
+                                size="large"
+                                placeholder="Enter email..."
+                            />
                         </Form.Item>
 
                         <Form.Item>
@@ -216,7 +242,7 @@ export default function AddBlog() {
                                 type="primary"
                                 htmlType="submit"
                             >
-                                Submit
+                                გამოქვეყნება
                             </Button>
                         </Form.Item>
                     </Form>
