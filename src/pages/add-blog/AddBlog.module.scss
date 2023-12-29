@@ -1,0 +1,15 @@
+.addblog_section {
+    &_content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        &_title {}
+
+        &_formWrapper {
+            // width: 600px;
+
+            &_form {}
+        }
+    }
+}

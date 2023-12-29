@@ -1,0 +1,33 @@
+.home_section {
+
+    &_top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        h1 {
+            font-size: 64px;
+            font-weight: 700;
+            line-height: 72px;
+            font-style: normal;
+        }
+
+        &_image {
+            width: 624px;
+            height: 200px !important;
+            flex-shrink: 0;
+        }
+    }
+
+    &_filterList {
+        ul {
+            list-style-type: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+
+            li {}
+        }
+    }
+}

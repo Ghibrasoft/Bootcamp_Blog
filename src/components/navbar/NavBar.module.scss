@@ -1,0 +1,19 @@
+.imageWrapper {
+    cursor: pointer;
+}
+
+.menu {
+    // width: 100%;
+    flex: 1;
+    justify-content: end;
+
+    &_item {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        svg {
+            font-size: 25px;
+        }
+    }
+}
