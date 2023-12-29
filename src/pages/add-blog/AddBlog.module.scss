@@ -1,4 +1,13 @@
 .addblog_section {
+    position: relative;
+
+    &_arrowLeft {
+        cursor: pointer;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
     &_content {
         display: flex;
         flex-direction: column;

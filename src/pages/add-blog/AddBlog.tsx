@@ -1,4 +1,4 @@
-import { DatePicker, Form, Input, Space } from "antd";
+import { DatePicker, Form, Image, Input, Space } from "antd";
 import AddBlogStyles from "./AddBlog.module.scss";
 import {
     Button,
@@ -9,6 +9,8 @@ import { addBlog } from "../../store/reducers/add-blog/addBlogSlice";
 import { useAppDispatch } from "../../store/store";
 import { isMinTwoWords } from "../../utils/helpers/isMinTwoWords";
 import { isGeorgian } from "../../utils/helpers/isGeorgian";
+import uploadIcon from "/upload.svg";
+import arrowLeft from "/arrowLeft.svg";
 
 const { Option } = Select;
 
@@ -57,6 +59,13 @@ export default function AddBlog() {
     };
     return (
         <section className={AddBlogStyles.addblog_section}>
+            <div className={AddBlogStyles.addblog_section_arrowLeft}>
+                <Image
+                    alt="arrow-left"
+                    src={arrowLeft}
+                    preview={false}
+                />
+            </div>
             <div className={AddBlogStyles.addblog_section_content}>
                 <div className={AddBlogStyles.addblog_section_content_title}>
                     <h1>ბლოგის დამატება</h1>
@@ -89,7 +98,12 @@ export default function AddBlog() {
                                         return false;
                                     }}
                                 >
-                                    <div className="">
+                                    <Image
+                                        preview={false}
+                                        src={uploadIcon}
+                                        alt="upload-icon"
+                                    />
+                                    <div>
                                         <span>ჩააგდეთ ფაილი აქ ან</span>
                                         <Button
                                             size="small"
@@ -240,6 +254,7 @@ export default function AddBlog() {
                             <Button
                                 size="large"
                                 type="primary"
+                                disabled={false}
                                 htmlType="submit"
                             >
                                 გამოქვეყნება

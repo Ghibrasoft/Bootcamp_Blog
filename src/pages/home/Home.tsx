@@ -21,14 +21,16 @@ export default function Home() {
 
             <div className={HomeStyles.home_section_filterList}>
                 <ul>
-                    {FILTER_LIST.map((item, index) => (
+                    {FILTER_LIST.map(({ title, color, bgColor }, index) => (
                         <li key={index}>
                             <Button
-                                size="small"
+                                size="middle"
+                                shape="round"
                                 type="primary"
                                 htmlType="button"
+                                style={{ background: bgColor, color: color }}
                             >
-                                {item}
+                                {title}
                             </Button>
                         </li>
                     ))}

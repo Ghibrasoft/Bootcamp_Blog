@@ -27,7 +27,12 @@
             justify-content: center;
             gap: 24px;
 
-            li {}
+            li {
+
+                button {
+                    box-shadow: none;
+                }
+            }
         }
     }
 }
