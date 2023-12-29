@@ -7,6 +7,8 @@ import {
 } from 'antd';
 import { addBlog } from "../../store/reducers/add-blog/addBlogSlice";
 import { useAppDispatch } from "../../store/store";
+import { isMinTwoWords } from "../../utils/helpers/isMinTwoWords";
+import { isGeorgian } from "../../utils/helpers/isGeorgian";
 
 const { Option } = Select;
 
@@ -30,17 +32,6 @@ export default function AddBlog() {
             return e;
         }
         return e?.fileList;
-    };
-
-    const isGeorgian = (value: any) => {
-        const georgianRegex = /[\u10A0-\u10FF]/;
-        return georgianRegex.test(value);
-    };
-
-    // Custom validator function for minimum 2 words
-    const isMinTwoWords = (value: any) => {
-        const words = value.split(/\s+/);
-        return words.length >= 2;
     };
 
     const onFinish = async (values: any) => {
