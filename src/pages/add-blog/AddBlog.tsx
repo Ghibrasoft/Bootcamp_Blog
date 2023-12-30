@@ -98,8 +98,12 @@ export default function AddBlog() {
 
     return (
         <section className={AddBlogStyles.addblog_section}>
-            <div className={AddBlogStyles.addblog_section_arrowLeft}>
+            <div
+                className={AddBlogStyles.addblog_section_arrowLeft}
+                onClick={() => history.back()}
+            >
                 <Image
+                    className={AddBlogStyles.addblog_section_arrowLeft_image}
                     alt="arrow-left"
                     src={arrowLeft}
                     preview={false}
