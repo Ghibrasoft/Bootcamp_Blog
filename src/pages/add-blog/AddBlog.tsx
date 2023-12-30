@@ -6,13 +6,14 @@ import {
     Upload,
 } from 'antd';
 import { addBlog } from "../../store/reducers/add-blog/addBlogSlice";
-import { useAppDispatch } from "../../store/store";
+import { RootState, useAppDispatch } from "../../store/store";
 import { isMinTwoWords } from "../../utils/helpers/isMinTwoWords";
 import { isGeorgian } from "../../utils/helpers/isGeorgian";
 import uploadIcon from "/upload.svg";
 import arrowLeft from "/arrowLeft.svg";
 import { useEffect, useState } from "react";
 import { InfoCircleFilled } from "@ant-design/icons";
+import { useSelector } from "react-redux";
 
 const { Option } = Select;
 
@@ -29,6 +30,7 @@ const SELECT_OPTIONS = [
 export default function AddBlog() {
     const [form] = Form.useForm();
     const dispatch = useAppDispatch();
+    const addBlogData = useSelector((state: RootState) => state.addBlog)
 
     const [submittable, setSubmittable] = useState(false);
     const values = Form.useWatch([], form);
@@ -103,10 +105,26 @@ export default function AddBlog() {
             const imageFile = values.image[0].originFileObj;
             const imageBase64 = await getBase64(imageFile);
             const formData = { ...values, image: imageBase64 };
-
             dispatch(addBlog(formData));
-        } catch (error) {
 
+
+            // const imageFile = values.image[0].originFileObj;
+            // const reader = new FileReader();
+            // reader.readAsArrayBuffer(imageFile);
+            // reader.onload = () => {
+            //     const arrayBuffer = reader.result as ArrayBuffer;
+            //     const binaryString = Array.from(new Uint8Array(arrayBuffer))
+            //         .map(byte => String.fromCharCode(byte))
+            //         .join('');
+
+            //     const formData = { ...values, image: binaryString };
+            //     dispatch(addBlog(formData));
+            // };
+            // reader.onerror = (error) => {
+            //     console.error("Error reading image file:", error);
+            // };
+        } catch (error) {
+            console.error("Error in onFinish:", error);
         }
     };
 
@@ -135,7 +153,6 @@ export default function AddBlog() {
                         name="add_blog"
                         layout="vertical"
                         onFinish={onFinish}
-                    // {...formItemLayout}
                     >
                         {/* upload photo */}
                         <Form.Item label="ატვირთეთ ფოტო">
@@ -152,7 +169,8 @@ export default function AddBlog() {
                                     multiple
                                     name="image"
                                     listType="picture"
-                                    accept=".png, .jpeg, .jpg"
+                                    // accept=".png, .jpeg, .jpg"
+                                    accept="image/*"
                                     beforeUpload={(file) => {
                                         // console.log(file);
                                         return false;
@@ -312,8 +330,9 @@ export default function AddBlog() {
                             <Button
                                 size="large"
                                 type="primary"
-                                disabled={!submittable}
                                 htmlType="submit"
+                                disabled={!submittable}
+                                loading={addBlogData.loading}
                             >
                                 გამოქვეყნება
                             </Button>
