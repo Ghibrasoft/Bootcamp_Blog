@@ -24,27 +24,46 @@
         }
 
         &_formWrapper {
-            width: 600px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+
 
             &_form {
+                width: 600px;
                 display: flex;
                 flex-direction: column;
+                gap: 24px;
 
                 &_group {
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     width: 100%;
-                    gap: 24px;
 
                     &_item {
                         width: inherit;
                         align-self: baseline;
 
+                        ul {
+                            padding-left: 16px;
+
+                            li {
+                                font-size: 12px;
+                            }
+                        }
+
                         &_datepicker {
                             width: 100%;
                         }
                     }
+                }
+
+                &_itemButton {
+                    display: flex;
+                    align-items: center;
+                    justify-content: end;
+                    width: 100%;
                 }
             }
         }

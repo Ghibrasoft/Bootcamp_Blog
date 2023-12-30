@@ -12,6 +12,7 @@ import { isGeorgian } from "../../utils/helpers/isGeorgian";
 import uploadIcon from "/upload.svg";
 import arrowLeft from "/arrowLeft.svg";
 import { useState } from "react";
+import { InfoCircleFilled, InfoCircleOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
@@ -40,21 +41,21 @@ export default function AddBlog() {
     const onBlurHandler = (field: string) => {
         switch (field) {
             case 'author':
-                if (authorVal?.length < 4 || authorVal && isMinTwoWords(authorVal) || isGeorgian(authorVal)) {
+                if (authorVal?.length <= 4 || authorVal && isMinTwoWords(authorVal) || isGeorgian(authorVal)) {
                     setValidationColor(prev => ({ ...prev, author: 'var(--color-error)' }))
                 } else {
                     setValidationColor(prev => ({ ...prev, author: 'var(--color-neutral-7)' }))
                 }
                 break;
             case 'title':
-                if (titleVal?.length < 4) {
+                if (titleVal?.length <= 4) {
                     setValidationColor(prev => ({ ...prev, title: 'var(--color-error)' }))
                 } else {
                     setValidationColor(prev => ({ ...prev, title: 'var(--color-neutral-7)' }))
                 }
                 break;
             case 'description':
-                if (descVal?.length < 4) {
+                if (descVal?.length <= 4) {
                     setValidationColor(prev => ({ ...prev, description: 'var(--color-error)' }))
                 } else {
                     setValidationColor(prev => ({ ...prev, description: 'var(--color-neutral-7)' }))
@@ -124,8 +125,9 @@ export default function AddBlog() {
                                 name="image"
                                 valuePropName="image"
                                 getValueFromEvent={normFile}
-                            // noStyle
-                            // rules={[{}]}
+                                // noStyle
+                                // rules={[{}]}
+                                wrapperCol={{ span: 23 }}
                             >
                                 <Upload.Dragger
                                     multiple
@@ -165,15 +167,16 @@ export default function AddBlog() {
                                 rules={[{ required: true }]}
                                 help={
                                     <ul>
-                                        <li style={{ color: authorVal?.length > 4 ? 'var(--color-success)' : validationColor.author }}>მინიმუმ 4 სიმბოლო</li>
+                                        <li style={{ color: authorVal?.length >= 4 ? 'var(--color-success)' : validationColor.author }}>მინიმუმ 4 სიმბოლო</li>
                                         <li style={{ color: authorVal && isMinTwoWords(authorVal) ? 'var(--color-success)' : validationColor.author }}>მინიმუმ ორი სიტყვა</li>
                                         <li style={{ color: isGeorgian(authorVal) ? 'var(--color-success)' : validationColor.author }}>მხოლოდ ქართული სიმბოლოები</li>
                                     </ul>
                                 }
+                                wrapperCol={{ span: 22 }}
                             >
                                 <Input
                                     size="large"
-                                    placeholder="Enter author..."
+                                    placeholder="შეიყვანეთ ავტორი..."
                                     onBlur={() => onBlurHandler('author')}
                                 />
                             </Form.Item>
@@ -183,11 +186,12 @@ export default function AddBlog() {
                                 name="title"
                                 label="სათაური"
                                 rules={[{ required: true }]}
-                                help={<span style={{ color: titleVal?.length >= 4 ? 'var(--color-success)' : validationColor.title }}>მინიმუმ 4 სიმბოლო</span>}
+                                help={<small style={{ color: titleVal?.length >= 4 ? 'var(--color-success)' : validationColor.title }}>მინიმუმ 4 სიმბოლო</small>}
+                                wrapperCol={{ span: 22 }}
                             >
                                 <Input
                                     size="large"
-                                    placeholder="Enter title..."
+                                    placeholder="შეიყვანეთ სათაური..."
                                     onBlur={() => onBlurHandler('title')}
                                 />
                             </Form.Item>
@@ -198,11 +202,12 @@ export default function AddBlog() {
                             name="description"
                             label="აღწერა"
                             rules={[{ required: true }]}
-                            help={<span style={{ color: descVal?.length >= 4 ? 'var(--color-success)' : validationColor.description }}>მინიმუმ 4 სიმბოლო</span>}
+                            help={<small style={{ color: descVal?.length >= 4 ? 'var(--color-success)' : validationColor.description }}>მინიმუმ 4 სიმბოლო</small>}
+                            wrapperCol={{ span: 23 }}
                         >
                             <Input.TextArea
                                 size="large"
-                                placeholder="Enter description..."
+                                placeholder="შეიყვანეთ აღწერა..."
                                 onBlur={() => onBlurHandler('description')}
                             />
                         </Form.Item>
@@ -214,15 +219,15 @@ export default function AddBlog() {
                                 // hasFeedback
                                 name="publish_date"
                                 label="გამოქვეყნების თარიღი"
-                                // rules={[{ required: true, message: 'Please select date!' }]}
                                 rules={[
-                                    { required: true }
+                                    { required: true, message: '' }
                                 ]}
+                                wrapperCol={{ span: 22 }}
                             >
                                 <DatePicker
                                     className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item_datepicker}
                                     size="large"
-                                    placeholder="Pick date..."
+                                    placeholder="12/12/2023"
                                 />
                             </Form.Item>
 
@@ -230,15 +235,15 @@ export default function AddBlog() {
                                 className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item}
                                 name="categories"
                                 label="კატეგორია"
-                                // rules={[{ required: true, message: 'Please select categories!', type: 'array' }]}
                                 rules={[
-                                    { required: true }
+                                    { required: true, message: '' }
                                 ]}
+                                wrapperCol={{ span: 22 }}
                             >
                                 <Select
                                     size="large"
                                     mode="multiple"
-                                    placeholder="Select categories"
+                                    placeholder="აიჩიეთ კატეგორია"
                                 >
                                     {SELECT_OPTIONS.map((option, index) => (
                                         <Option
@@ -256,14 +261,30 @@ export default function AddBlog() {
                         <Form.Item
                             name="email"
                             label="ელ-ფოსტა"
+                            validateTrigger="onBlur"
+                            wrapperCol={{ span: 11 }}
+                            rules={[{
+                                validator: (_, value) => {
+                                    if (value && !value.endsWith('@redberry.ge')) {
+                                        return Promise.reject(
+                                            <>
+                                                <InfoCircleFilled style={{ marginRight: 8 }} />
+                                                <span style={{ fontSize: '12px' }}>მეილი უნდა მთავრდებოდეს @redberry.ge-ით</span>
+                                            </>);
+                                    }
+                                    return Promise.resolve();
+                                },
+                            }]}
                         >
                             <Input
                                 size="large"
-                                placeholder="Enter email..."
+                                placeholder="Example@redberry.ge..."
                             />
                         </Form.Item>
 
-                        <Form.Item>
+                        <Form.Item
+                            className={AddBlogStyles.addblog_section_content_formWrapper_form_itemButton}
+                        >
                             <Button
                                 size="large"
                                 type="primary"
