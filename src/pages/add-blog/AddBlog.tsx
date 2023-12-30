@@ -11,7 +11,7 @@ import { isMinTwoWords } from "../../utils/helpers/isMinTwoWords";
 import { isGeorgian } from "../../utils/helpers/isGeorgian";
 import uploadIcon from "/upload.svg";
 import arrowLeft from "/arrowLeft.svg";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { InfoCircleFilled } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 

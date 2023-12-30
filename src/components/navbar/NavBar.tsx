@@ -95,13 +95,13 @@ const NavBar = () => {
                                 label="ელ-ფოსტა"
                                 validateTrigger="onBlur"
                                 rules={[
-                                    { required: true },
+                                    { required: true, message: '' },
                                     { type: 'email' },
                                     { whitespace: true }
                                 ]}
                                 help={userData.error &&
                                     <span style={{ color: 'var(--color-error)' }}>
-                                        {userData.error}
+                                        {userData.error.message}
                                     </span>
                                 }
                             >

@@ -10,7 +10,12 @@ export const addBlog = createAsyncThunk<
   try {
     const res = await axios.post(
       "https://api.blog.redberryinternship.ge/api/blogs",
-      blogData
+      blogData,
+      {
+        headers: {
+          Authorization: `Bearer ${""}`,
+        },
+      }
     );
     return res.data;
   } catch (error) {
