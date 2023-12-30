@@ -33,7 +33,7 @@ const NavBar = () => {
                         type="primary"
                         htmlType="button"
                     >
-                        Add Blog
+                        დაამატე ბლოგი
                     </Button>
                 </Link>
                 :
@@ -43,14 +43,14 @@ const NavBar = () => {
                     htmlType="button"
                     onClick={() => setOpenModal(true)}
                 >
-                    Log in
+                    შესვლა
                 </Button>
             }
 
             <Modal
                 open={openModal}
-                title="Log in"
-                okText="Log in"
+                title="შესვლა"
+                okText="შესვლა"
                 okButtonProps={{ style: { display: userData.isLogged ? 'none' : 'inline' } }}
                 onCancel={() => { setOpenModal(false); modalForm.resetFields() }}
                 cancelButtonProps={{ style: { display: 'none' } }}
@@ -67,16 +67,18 @@ const NavBar = () => {
             >
                 {userData.isLogged ?
                     <Result
+                        style={{ padding: 0 }}
                         status="success"
-                        title="Authorization success"
+                        title="წარმატებული ავტორიზაცია"
                         extra={
                             <Button
+                                block
                                 size="large"
                                 type="primary"
                                 htmlType="button"
                                 onClick={() => setOpenModal(false)}
                             >
-                                Ok
+                                კარგი
                             </Button>
                         }
                     />
@@ -90,7 +92,7 @@ const NavBar = () => {
                         >
                             <Form.Item
                                 name="email"
-                                label="Email"
+                                label="ელ-ფოსტა"
                                 validateTrigger="onBlur"
                                 rules={[
                                     { required: true },

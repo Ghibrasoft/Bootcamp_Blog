@@ -10,7 +10,7 @@ export default function Home() {
     return (
         <section className={HomeStyles.home_section}>
             <div className={HomeStyles.home_section_top}>
-                <h1>Blog</h1>
+                <h1>ბლოგი</h1>
                 <Image
                     className={HomeStyles.home_section_top_image}
                     alt="blog-img"

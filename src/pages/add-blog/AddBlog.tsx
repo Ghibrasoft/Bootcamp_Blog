@@ -28,9 +28,42 @@ const SELECT_OPTIONS = [
 export default function AddBlog() {
     const [form] = Form.useForm();
     const dispatch = useAppDispatch();
+    const [validationColor, setValidationColor] = useState({
+        author: 'var(--color-neutral-7)',
+        title: 'var(--color-neutral-7)',
+        description: 'var(--color-neutral-7)'
+    })
     const authorVal = Form.useWatch('author', form);
     const titleVal = Form.useWatch('title', form);
     const descVal = Form.useWatch('description', form);
+
+    const onBlurHandler = (field: string) => {
+        switch (field) {
+            case 'author':
+                if (authorVal?.length < 4 || authorVal && isMinTwoWords(authorVal) || isGeorgian(authorVal)) {
+                    setValidationColor(prev => ({ ...prev, author: 'var(--color-error)' }))
+                } else {
+                    setValidationColor(prev => ({ ...prev, author: 'var(--color-neutral-7)' }))
+                }
+                break;
+            case 'title':
+                if (titleVal?.length < 4) {
+                    setValidationColor(prev => ({ ...prev, title: 'var(--color-error)' }))
+                } else {
+                    setValidationColor(prev => ({ ...prev, title: 'var(--color-neutral-7)' }))
+                }
+                break;
+            case 'description':
+                if (descVal?.length < 4) {
+                    setValidationColor(prev => ({ ...prev, description: 'var(--color-error)' }))
+                } else {
+                    setValidationColor(prev => ({ ...prev, description: 'var(--color-neutral-7)' }))
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
     const getBase64 = (file: File) => {
         return new Promise<string | ArrayBuffer | null>((resolve, reject) => {
@@ -129,46 +162,19 @@ export default function AddBlog() {
                                 className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item}
                                 name="author"
                                 label="ავტორი"
-                                // rules={[
-                                //     {
-                                //         required: true,
-                                //         message: 'შეავსეთ ველი',
-                                //     },
-                                //     {
-                                //         min: 4,
-                                //         message: 'მინიმუმ 4 სიმბოლო',
-
-                                //     },
-                                //     {
-                                //         validator: (_, value) => {
-                                //             if (value) {
-                                //                 // if (value.length < 4) {
-                                //                 //     return Promise.reject('მინიმუმ 4 სიმბოლო');
-                                //                 // }
-                                //                 if (!isMinTwoWords(value)) {
-                                //                     return Promise.reject('მინიმუმ ორი სიტყვა');
-                                //                 }
-                                //                 if (!isGeorgian(value)) {
-                                //                     return Promise.reject('მხოლოდ ქართული სიმბოლოები');
-                                //                 }
-                                //                 return Promise.resolve();
-                                //             } else {
-                                //                 return Promise.reject('');
-                                //             }
-                                //         }
-                                //     }
-                                // ]}
+                                rules={[{ required: true }]}
                                 help={
                                     <ul>
-                                        <li style={{ color: authorVal?.length > 4 ? 'var(--color-success)' : 'var(--color-error)' }}>მინიმუმ 4 სიმბოლო</li>
-                                        <li style={{ color: authorVal && isMinTwoWords(authorVal) ? 'var(--color-success)' : 'var(--color-error)' }}>მინიმუმ ორი სიტყვა</li>
-                                        <li style={{ color: isGeorgian(authorVal) ? 'var(--color-success)' : 'var(--color-error)' }}>მხოლოდ ქართული სიმბოლოები</li>
+                                        <li style={{ color: authorVal?.length > 4 ? 'var(--color-success)' : validationColor.author }}>მინიმუმ 4 სიმბოლო</li>
+                                        <li style={{ color: authorVal && isMinTwoWords(authorVal) ? 'var(--color-success)' : validationColor.author }}>მინიმუმ ორი სიტყვა</li>
+                                        <li style={{ color: isGeorgian(authorVal) ? 'var(--color-success)' : validationColor.author }}>მხოლოდ ქართული სიმბოლოები</li>
                                     </ul>
                                 }
                             >
                                 <Input
                                     size="large"
                                     placeholder="Enter author..."
+                                    onBlur={() => onBlurHandler('author')}
                                 />
                             </Form.Item>
 
@@ -176,19 +182,13 @@ export default function AddBlog() {
                                 className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item}
                                 name="title"
                                 label="სათაური"
-                                // rules={[
-                                //     {
-                                //         required: true,
-                                //         min: 4,
-                                //         message: 'მინიმუმ 4 სიმბოლო'
-                                //     }
-                                // ]}
-                                help={<span style={{ color: titleVal?.length >= 4 ? 'var(--color-success)' : 'var(--color-error)' }}>მინიმუმ 4 სიმბოლო</span>}
-                                validateStatus={"success"}
+                                rules={[{ required: true }]}
+                                help={<span style={{ color: titleVal?.length >= 4 ? 'var(--color-success)' : validationColor.title }}>მინიმუმ 4 სიმბოლო</span>}
                             >
                                 <Input
                                     size="large"
                                     placeholder="Enter title..."
+                                    onBlur={() => onBlurHandler('title')}
                                 />
                             </Form.Item>
                         </div>
@@ -197,22 +197,13 @@ export default function AddBlog() {
                         <Form.Item
                             name="description"
                             label="აღწერა"
-                            // rules={[
-                            //     {
-                            //         required: true,
-                            //         message: ''
-                            //     },
-                            //     {
-                            //         min: 4,
-                            //         message: 'მინიმუმ 4 სიმბოლო'
-                            //     }
-                            // ]}
-                            help={<span style={{ color: descVal?.length >= 4 ? 'var(--color-success)' : 'var(--color-error)' }}>მინიმუმ 2 სიმბოლო</span>}
-                            validateStatus={"success"}
+                            rules={[{ required: true }]}
+                            help={<span style={{ color: descVal?.length >= 4 ? 'var(--color-success)' : validationColor.description }}>მინიმუმ 4 სიმბოლო</span>}
                         >
                             <Input.TextArea
                                 size="large"
                                 placeholder="Enter description..."
+                                onBlur={() => onBlurHandler('description')}
                             />
                         </Form.Item>
 
