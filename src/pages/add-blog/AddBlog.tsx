@@ -11,8 +11,8 @@ import { isMinTwoWords } from "../../utils/helpers/isMinTwoWords";
 import { isGeorgian } from "../../utils/helpers/isGeorgian";
 import uploadIcon from "/upload.svg";
 import arrowLeft from "/arrowLeft.svg";
-import { useState } from "react";
-import { InfoCircleFilled, InfoCircleOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
+import { InfoCircleFilled } from "@ant-design/icons";
 
 const { Option } = Select;
 
@@ -29,6 +29,20 @@ const SELECT_OPTIONS = [
 export default function AddBlog() {
     const [form] = Form.useForm();
     const dispatch = useAppDispatch();
+
+    const [submittable, setSubmittable] = useState(false);
+    const values = Form.useWatch([], form);
+
+    useEffect(() => {
+        form.validateFields({ validateOnly: true }).then(
+            () => {
+                setSubmittable(true);
+            },
+            () => {
+                setSubmittable(false);
+            },
+        );
+    }, [values]);
     const [validationColor, setValidationColor] = useState({
         author: 'var(--color-neutral-7)',
         title: 'var(--color-neutral-7)',
@@ -37,7 +51,6 @@ export default function AddBlog() {
     const authorVal = Form.useWatch('author', form);
     const titleVal = Form.useWatch('title', form);
     const descVal = Form.useWatch('description', form);
-
     const onBlurHandler = (field: string) => {
         switch (field) {
             case 'author':
@@ -65,6 +78,7 @@ export default function AddBlog() {
                 break;
         }
     }
+
 
     const getBase64 = (file: File) => {
         return new Promise<string | ArrayBuffer | null>((resolve, reject) => {
@@ -128,10 +142,11 @@ export default function AddBlog() {
                             <Form.Item
                                 name="image"
                                 valuePropName="image"
-                                getValueFromEvent={normFile}
-                                // noStyle
-                                // rules={[{}]}
                                 wrapperCol={{ span: 23 }}
+                                getValueFromEvent={normFile}
+                                rules={[
+                                    { required: true, message: '' }
+                                ]}
                             >
                                 <Upload.Dragger
                                     multiple
@@ -168,6 +183,7 @@ export default function AddBlog() {
                                 className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item}
                                 name="author"
                                 label="ავტორი"
+                                wrapperCol={{ span: 22 }}
                                 rules={[{ required: true }]}
                                 help={
                                     <ul>
@@ -176,7 +192,6 @@ export default function AddBlog() {
                                         <li style={{ color: isGeorgian(authorVal) ? 'var(--color-success)' : validationColor.author }}>მხოლოდ ქართული სიმბოლოები</li>
                                     </ul>
                                 }
-                                wrapperCol={{ span: 22 }}
                             >
                                 <Input
                                     size="large"
@@ -189,9 +204,9 @@ export default function AddBlog() {
                                 className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item}
                                 name="title"
                                 label="სათაური"
+                                wrapperCol={{ span: 22 }}
                                 rules={[{ required: true }]}
                                 help={<small style={{ color: titleVal?.length >= 4 ? 'var(--color-success)' : validationColor.title }}>მინიმუმ 4 სიმბოლო</small>}
-                                wrapperCol={{ span: 22 }}
                             >
                                 <Input
                                     size="large"
@@ -205,12 +220,14 @@ export default function AddBlog() {
                         <Form.Item
                             name="description"
                             label="აღწერა"
+                            wrapperCol={{ span: 23 }}
                             rules={[{ required: true }]}
                             help={<small style={{ color: descVal?.length >= 4 ? 'var(--color-success)' : validationColor.description }}>მინიმუმ 4 სიმბოლო</small>}
-                            wrapperCol={{ span: 23 }}
                         >
                             <Input.TextArea
+                                rows={3}
                                 size="large"
+                                style={{ resize: 'none' }}
                                 placeholder="შეიყვანეთ აღწერა..."
                                 onBlur={() => onBlurHandler('description')}
                             />
@@ -267,18 +284,21 @@ export default function AddBlog() {
                             label="ელ-ფოსტა"
                             validateTrigger="onBlur"
                             wrapperCol={{ span: 11 }}
-                            rules={[{
-                                validator: (_, value) => {
-                                    if (value && !value.endsWith('@redberry.ge')) {
-                                        return Promise.reject(
-                                            <>
-                                                <InfoCircleFilled style={{ marginRight: 8 }} />
-                                                <span style={{ fontSize: '12px' }}>მეილი უნდა მთავრდებოდეს @redberry.ge-ით</span>
-                                            </>);
-                                    }
-                                    return Promise.resolve();
-                                },
-                            }]}
+                            rules={[
+                                { required: true, message: '' },
+                                {
+                                    validator: (_, value) => {
+                                        if (value && !value.endsWith('@redberry.ge')) {
+                                            return Promise.reject(
+                                                <>
+                                                    <InfoCircleFilled style={{ marginRight: 8 }} />
+                                                    <span style={{ fontSize: '12px' }}>მეილი უნდა მთავრდებოდეს @redberry.ge-ით</span>
+                                                </>);
+                                        }
+                                        return Promise.resolve();
+                                    },
+                                }
+                            ]}
                         >
                             <Input
                                 size="large"
@@ -292,7 +312,7 @@ export default function AddBlog() {
                             <Button
                                 size="large"
                                 type="primary"
-                                disabled={false}
+                                disabled={!submittable}
                                 htmlType="submit"
                             >
                                 გამოქვეყნება
