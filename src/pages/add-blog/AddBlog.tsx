@@ -1,4 +1,4 @@
-import { DatePicker, Form, Image, Input } from "antd";
+import { DatePicker, Form, Image, Input, Tag } from "antd";
 import AddBlogStyles from "./AddBlog.module.scss";
 import {
     Button,
@@ -16,6 +16,9 @@ import { InfoCircleFilled } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { getToken } from "../../utils/helpers/getToken";
+import { fetchCategories } from "../../store/reducers/categories/categoriesSlice";
+import type { CustomTagProps } from 'rc-select/lib/BaseSelect';
+
 
 const { Option } = Select;
 
@@ -33,7 +36,68 @@ export default function AddBlog() {
     const [form] = Form.useForm();
     const dispatch = useAppDispatch();
     const addBlogData = useSelector((state: RootState) => state.addBlog)
+    const categories = useSelector((state: RootState) => state.categories.data);
 
+    // select
+    const tagRender = (props: CustomTagProps) => {
+        const { label, value, closable, onClose } = props;
+        const category = categories.find((cat) => cat.id === Number(value));
+
+        if (category) {
+            const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
+                event.preventDefault();
+                event.stopPropagation();
+            };
+
+            return (
+                <Tag
+                    color={category.background_color}
+                    onMouseDown={onPreventMouseDown}
+                    closable={closable}
+                    onClose={onClose}
+                    style={{ marginRight: 3, color: category.text_color }}
+                >
+                    {category.title}
+                </Tag>
+            );
+        }
+
+        return null;
+    };
+    useEffect(() => {
+        const fetchCategoriesData = () => {
+            dispatch(fetchCategories(''))
+        }
+        fetchCategoriesData()
+    }, []);
+
+    // image
+    const getBase64 = (file: File): Promise<string> => {
+        return new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsArrayBuffer(file);
+
+            reader.onload = () => {
+                const arrayBuffer = reader.result as ArrayBuffer;
+                const binaryString = Array.from(new Uint8Array(arrayBuffer))
+                    .map((byte) => String.fromCharCode(byte))
+                    .join('');
+
+                resolve(binaryString);
+            };
+
+            reader.onerror = (error) => reject(error);
+        });
+    };
+    const normFile = (e: any) => {
+        // console.log('Upload event:', e);
+        if (Array.isArray(e)) {
+            return e;
+        }
+        return e?.fileList;
+    };
+
+    // form functionality
     const [submittable, setSubmittable] = useState(false);
     const values = Form.useWatch([], form);
     useEffect(() => {
@@ -81,32 +145,6 @@ export default function AddBlog() {
                 break;
         }
     }
-
-
-    const getBase64 = (file: File): Promise<string> => {
-        return new Promise<string>((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsArrayBuffer(file);
-
-            reader.onload = () => {
-                const arrayBuffer = reader.result as ArrayBuffer;
-                const binaryString = Array.from(new Uint8Array(arrayBuffer))
-                    .map((byte) => String.fromCharCode(byte))
-                    .join('');
-
-                resolve(binaryString);
-            };
-
-            reader.onerror = (error) => reject(error);
-        });
-    };
-    const normFile = (e: any) => {
-        // console.log('Upload event:', e);
-        if (Array.isArray(e)) {
-            return e;
-        }
-        return e?.fileList;
-    };
     const onFinish = async (values: any) => {
         // console.log(values);
         try {
@@ -274,24 +312,26 @@ export default function AddBlog() {
                                 className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item}
                                 name="categories"
                                 label="კატეგორია"
+                                wrapperCol={{ span: 22 }}
                                 rules={[
                                     { required: true, message: '' }
                                 ]}
-                                wrapperCol={{ span: 22 }}
                             >
                                 <Select
                                     size="large"
                                     mode="multiple"
                                     placeholder="აიჩიეთ კატეგორია"
+                                    tagRender={tagRender}
+                                    options={categories.map((cat) => ({ label: cat.title, value: String(cat.id) }))}
                                 >
-                                    {SELECT_OPTIONS.map((option, index) => (
+                                    {/* {categories.map(({ id, title, text_color, background_color }) => (
                                         <Option
-                                            key={index}
-                                            value={option}
+                                            key={id}
+                                            value={title}
                                         >
-                                            {option}
+                                            {title}
                                         </Option>
-                                    ))}
+                                    ))} */}
                                 </Select>
                             </Form.Item>
                         </div>

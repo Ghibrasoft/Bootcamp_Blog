@@ -1,25 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { IAddBlogProps, IErrorResponse } from "../../../types/blogType";
+import { IErrorResponse } from "../../../types/blogType";
 
-interface IAddBlogData {
-  blogData: IAddBlogProps;
-  token: string;
-}
-export const addBlog = createAsyncThunk<
+export const fetchCategories = createAsyncThunk<
   any,
-  IAddBlogData,
+  any,
   { rejectValue: IErrorResponse }
->("blogs/addblog", async ({ blogData, token }, { rejectWithValue }) => {
+>("blogs/categories", async ({ rejectWithValue }) => {
   try {
-    const res = await axios.post(
-      "https://api.blog.redberryinternship.ge/api/blogs",
-      blogData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+    const res = await axios.get(
+      "https://api.blog.redberryinternship.ge/api/categories"
     );
     return res.data;
   } catch (error) {
@@ -35,27 +25,37 @@ export const addBlog = createAsyncThunk<
   }
 });
 
-interface IBlogState {
+interface IDataProps {
+  id: number;
+  title: string;
+  text_color: string;
+  background_color: string;
+}
+interface ICategoriesState {
+  data: IDataProps[];
   loading: boolean;
   error: IErrorResponse | null;
 }
-const initialState: IBlogState = {
+
+const initialState: ICategoriesState = {
+  data: [],
   loading: false,
   error: null,
 };
-const addBlogSlice = createSlice({
-  name: "blogs/addblog",
+const categoriesSlice = createSlice({
+  name: "blogs/categories",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(addBlog.pending, (state) => {
+      .addCase(fetchCategories.pending, (state) => {
         state.loading = true;
       })
-      .addCase(addBlog.fulfilled, (state) => {
+      .addCase(fetchCategories.fulfilled, (state, action) => {
         state.loading = false;
+        state.data = action.payload.data;
       })
-      .addCase(addBlog.rejected, (state, action) => {
+      .addCase(fetchCategories.rejected, (state, action) => {
         state.loading = false;
         if (action.payload) {
           state.error = action.payload;
@@ -66,5 +66,5 @@ const addBlogSlice = createSlice({
   },
 });
 
-export const {} = addBlogSlice.actions;
-export default addBlogSlice.reducer;
+export const {} = categoriesSlice.actions;
+export default categoriesSlice.reducer;
