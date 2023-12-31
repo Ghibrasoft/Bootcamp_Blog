@@ -1,12 +1,14 @@
-import { Button, Form, Image, Input, Modal, Result, Spin } from "antd";
+import { Button, Form, Image, Input, Modal, Result } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import NavBarStyles from "./NavBar.module.scss";
 
 import brandLogo from "/brandLogo.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { loginUser } from "../../store/reducers/login/loginSlice";
 import { RootState, useAppDispatch } from "../../store/store";
+import { getToken } from "../../utils/helpers/getToken";
+import { fetchBlogData } from "../../store/reducers/blogs/blogsSlice";
 
 
 const NavBar = () => {
@@ -15,6 +17,17 @@ const NavBar = () => {
     const userData = useSelector((state: RootState) => state.login);
     const [modalForm] = Form.useForm();
     const [openModal, setOpenModal] = useState(false);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (userData.isLogged) {
+                const token = await getToken();
+                dispatch(fetchBlogData(token))
+            }
+        }
+
+        fetchData();
+    }, [dispatch, userData.isLogged]);
 
     return (
         <>

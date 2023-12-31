@@ -14,6 +14,8 @@ import arrowLeft from "/arrowLeft.svg";
 import { useEffect, useRef, useState } from "react";
 import { InfoCircleFilled } from "@ant-design/icons";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import { getToken } from "../../utils/helpers/getToken";
 
 const { Option } = Select;
 
@@ -108,12 +110,19 @@ export default function AddBlog() {
     const onFinish = async (values: any) => {
         // console.log(values);
         try {
+            const token = await getToken();
+
             const imageFile = values.image[0].originFileObj;
             const imageBase64 = await getBase64(imageFile);
-            const formData = { ...values, image: imageBase64 };
-            console.log(formData);
+            const blogData = { ...values, image: imageBase64 };
 
-            dispatch(addBlog(formData));
+            console.log(blogData);
+            // dispatch(addBlog(formData));
+            if (token) {
+                dispatch(addBlog({ blogData, token }));
+            } else {
+                console.error("Token isn't available!")
+            }
         } catch (error) {
             console.error("Error in onFinish:", error);
         }
