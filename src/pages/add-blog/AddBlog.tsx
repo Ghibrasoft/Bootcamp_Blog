@@ -11,27 +11,13 @@ import { isMinTwoWords } from "../../utils/helpers/isMinTwoWords";
 import { isGeorgian } from "../../utils/helpers/isGeorgian";
 import uploadIcon from "/upload.svg";
 import arrowLeft from "/arrowLeft.svg";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { InfoCircleFilled } from "@ant-design/icons";
 import { useSelector } from "react-redux";
-import axios from "axios";
 import { getToken } from "../../utils/helpers/getToken";
 import { fetchCategories } from "../../store/reducers/categories/categoriesSlice";
 import type { CustomTagProps } from 'rc-select/lib/BaseSelect';
 
-
-const { Option } = Select;
-
-
-
-const SELECT_OPTIONS = [
-    'მარკეტი',
-    'აპლიკაცია',
-    'ხელოვნური ინტელექტი',
-    'UI/UX',
-    'კვლევა',
-    'Figma'
-]
 export default function AddBlog() {
     const [form] = Form.useForm();
     const dispatch = useAppDispatch();
@@ -40,7 +26,7 @@ export default function AddBlog() {
 
     // select
     const tagRender = (props: CustomTagProps) => {
-        const { label, value, closable, onClose } = props;
+        const { value, closable, onClose } = props;
         const category = categories.find((cat) => cat.id === Number(value));
 
         if (category) {
@@ -62,7 +48,7 @@ export default function AddBlog() {
             );
         }
 
-        return null;
+        return <></>;
     };
     useEffect(() => {
         const fetchCategoriesData = () => {
@@ -318,21 +304,13 @@ export default function AddBlog() {
                                 ]}
                             >
                                 <Select
+                                    allowClear
                                     size="large"
                                     mode="multiple"
                                     placeholder="აიჩიეთ კატეგორია"
                                     tagRender={tagRender}
                                     options={categories.map((cat) => ({ label: cat.title, value: String(cat.id) }))}
-                                >
-                                    {/* {categories.map(({ id, title, text_color, background_color }) => (
-                                        <Option
-                                            key={id}
-                                            value={title}
-                                        >
-                                            {title}
-                                        </Option>
-                                    ))} */}
-                                </Select>
+                                />
                             </Form.Item>
                         </div>
 
