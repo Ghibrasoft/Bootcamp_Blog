@@ -51,9 +51,10 @@ const NavBar = () => {
                 open={openModal}
                 title="შესვლა"
                 okText="შესვლა"
-                okButtonProps={{ style: { display: userData.isLogged ? 'none' : 'inline' } }}
-                onCancel={() => { setOpenModal(false); modalForm.resetFields() }}
+                confirmLoading={userData.loading}
                 cancelButtonProps={{ style: { display: 'none' } }}
+                onCancel={() => { setOpenModal(false); modalForm.resetFields() }}
+                okButtonProps={{ style: { display: userData.isLogged ? 'none' : 'inline' } }}
                 onOk={async () => {
                     try {
                         await modalForm.validateFields();
@@ -83,32 +84,30 @@ const NavBar = () => {
                         }
                     />
                     :
-                    <Spin spinning={userData.loading}>
-                        <Form
-                            form={modalForm}
-                            layout="vertical"
-                            name="login_form"
-                            initialValues={{ modifier: 'public' }}
+                    <Form
+                        form={modalForm}
+                        layout="vertical"
+                        name="login_form"
+                        initialValues={{ modifier: 'public' }}
+                    >
+                        <Form.Item
+                            name="email"
+                            label="ელ-ფოსტა"
+                            validateTrigger="onBlur"
+                            rules={[
+                                { required: true, message: '' },
+                                { type: 'email' },
+                                { whitespace: true }
+                            ]}
+                            help={userData.error &&
+                                <span style={{ color: 'var(--color-error)' }}>
+                                    {userData.error.message}
+                                </span>
+                            }
                         >
-                            <Form.Item
-                                name="email"
-                                label="ელ-ფოსტა"
-                                validateTrigger="onBlur"
-                                rules={[
-                                    { required: true, message: '' },
-                                    { type: 'email' },
-                                    { whitespace: true }
-                                ]}
-                                help={userData.error &&
-                                    <span style={{ color: 'var(--color-error)' }}>
-                                        {userData.error.message}
-                                    </span>
-                                }
-                            >
-                                <Input placeholder="Example@redberry.ge" />
-                            </Form.Item>
-                        </Form>
-                    </Spin>
+                            <Input placeholder="Example@redberry.ge" />
+                        </Form.Item>
+                    </Form>
                 }
             </Modal>
         </>

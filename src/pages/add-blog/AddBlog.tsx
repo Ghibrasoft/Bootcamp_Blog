@@ -34,7 +34,6 @@ export default function AddBlog() {
 
     const [submittable, setSubmittable] = useState(false);
     const values = Form.useWatch([], form);
-
     useEffect(() => {
         form.validateFields({ validateOnly: true }).then(
             () => {
@@ -82,15 +81,23 @@ export default function AddBlog() {
     }
 
 
-    const getBase64 = (file: File) => {
-        return new Promise<string | ArrayBuffer | null>((resolve, reject) => {
+    const getBase64 = (file: File): Promise<string> => {
+        return new Promise<string>((resolve, reject) => {
             const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
+            reader.readAsArrayBuffer(file);
+
+            reader.onload = () => {
+                const arrayBuffer = reader.result as ArrayBuffer;
+                const binaryString = Array.from(new Uint8Array(arrayBuffer))
+                    .map((byte) => String.fromCharCode(byte))
+                    .join('');
+
+                resolve(binaryString);
+            };
+
             reader.onerror = (error) => reject(error);
         });
     };
-
     const normFile = (e: any) => {
         // console.log('Upload event:', e);
         if (Array.isArray(e)) {
@@ -98,31 +105,15 @@ export default function AddBlog() {
         }
         return e?.fileList;
     };
-
     const onFinish = async (values: any) => {
         // console.log(values);
         try {
             const imageFile = values.image[0].originFileObj;
             const imageBase64 = await getBase64(imageFile);
             const formData = { ...values, image: imageBase64 };
+            console.log(formData);
+
             dispatch(addBlog(formData));
-
-
-            // const imageFile = values.image[0].originFileObj;
-            // const reader = new FileReader();
-            // reader.readAsArrayBuffer(imageFile);
-            // reader.onload = () => {
-            //     const arrayBuffer = reader.result as ArrayBuffer;
-            //     const binaryString = Array.from(new Uint8Array(arrayBuffer))
-            //         .map(byte => String.fromCharCode(byte))
-            //         .join('');
-
-            //     const formData = { ...values, image: binaryString };
-            //     dispatch(addBlog(formData));
-            // };
-            // reader.onerror = (error) => {
-            //     console.error("Error reading image file:", error);
-            // };
         } catch (error) {
             console.error("Error in onFinish:", error);
         }
