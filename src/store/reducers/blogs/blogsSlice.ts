@@ -1,19 +1,27 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { IErrorResponse } from "../../../types/blogType";
 
-export const fetchBlogData = createAsyncThunk(
-  "blogs",
-  async (_, { rejectWithValue }) => {
-    try {
-      const res = await axios.get(
-        "https://api.blog.redberryinternship.ge/api/blogs"
-      );
-      return res.data;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
-    }
+export const fetchBlogData = createAsyncThunk<
+  any,
+  string | null,
+  { rejectValue: IErrorResponse }
+>("blogs", async (token, { rejectWithValue }) => {
+  try {
+    const res = await axios.get(
+      "https://api.blog.redberryinternship.ge/api/blogs",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    // console.log(res.data);
+    return res.data;
+  } catch (error: any) {
+    return rejectWithValue(error.message);
   }
-);
+});
 
 const blogSlice = createSlice({
   name: "blog",
