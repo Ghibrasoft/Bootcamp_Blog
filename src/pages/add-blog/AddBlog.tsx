@@ -31,7 +31,7 @@ export default function AddBlog() {
     const dispatch = useAppDispatch();
     const addBlogData = useSelector((state: RootState) => state.addBlog)
     const categories = useSelector((state: RootState) => state.categories.data);
-    const [openModal, setOpenModal] = useState(true)
+    const [openModal, setOpenModal] = useState(false);
 
     // select
     const tagRender = (props: CustomTagProps) => {
@@ -149,9 +149,11 @@ export default function AddBlog() {
     const onFinish = async (values: IFormDataProps) => {
         try {
             const token = await getToken();
-
+            if (!token) {
+                console.error("Token isn't available!");
+                return;
+            }
             const imageFile = values.image[0].originFileObj;
-            console.log(typeof values.image[0].originFileObj)
 
             const formData = new FormData();
             formData.append('image', imageFile);
@@ -162,12 +164,7 @@ export default function AddBlog() {
             formData.append('categories', JSON.stringify(values.categories));
             formData.append('email', values.email);
 
-            console.log(formData)
-            if (token) {
-                dispatch(addBlog({ formData, token } as any));
-            } else {
-                console.error("Token isn't available!")
-            }
+            dispatch(addBlog({ formData, token } as any));
         } catch (error) {
             console.error("Error in onFinish:", error);
         }
