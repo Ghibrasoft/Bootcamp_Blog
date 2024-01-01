@@ -147,6 +147,7 @@ export default function AddBlog() {
         }
     }
     const onFinish = async (values: IFormDataProps) => {
+        // console.log(values)
         try {
             const token = await getToken();
             if (!token) {
@@ -164,7 +165,9 @@ export default function AddBlog() {
             formData.append('categories', JSON.stringify(values.categories));
             formData.append('email', values.email);
 
-            dispatch(addBlog({ formData, token } as any));
+            // console.log(formData)
+
+            dispatch(addBlog({ formData, token }));
         } catch (error) {
             console.error("Error in onFinish:", error);
         }
@@ -216,15 +219,15 @@ export default function AddBlog() {
                                     ]}
                                 >
                                     <Upload.Dragger
-                                        multiple
                                         name="image"
                                         listType="picture"
-                                        // accept=".png, .jpeg, .jpg"
-                                        accept="image/*"
+                                        accept=".png, .jpeg, .jpg"
                                         beforeUpload={(file) => {
                                             // console.log(file);
                                             return false;
                                         }}
+                                    // multiple
+                                    // accept="image/*"
                                     >
                                         <Image
                                             preview={false}

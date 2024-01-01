@@ -1,14 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { IFormDataProps, IErrorResponse } from "../../../types/blogType";
+import { IErrorResponse } from "../../../types/blogType";
 
-interface IAddBlogData {
-  formData: IFormDataProps;
-  token: string;
-}
 export const addBlog = createAsyncThunk<
-  IFormDataProps,
-  IAddBlogData,
+  void,
+  any,
   { rejectValue: IErrorResponse }
 >("blogs/addblog", async ({ formData, token }, { rejectWithValue }) => {
   try {
