@@ -41,7 +41,13 @@ export default function AddBlog() {
                     onMouseDown={onPreventMouseDown}
                     closable={closable}
                     onClose={onClose}
-                    style={{ marginRight: 3, color: category.text_color }}
+                    style={{
+                        gap: 10,
+                        display: 'flex',
+                        padding: '8px 16px',
+                        borderRadius: '30px',
+                        color: category.text_color,
+                    }}
                 >
                     {category.title}
                 </Tag>
@@ -309,7 +315,19 @@ export default function AddBlog() {
                                     mode="multiple"
                                     placeholder="აიჩიეთ კატეგორია"
                                     tagRender={tagRender}
-                                    options={categories.map((cat) => ({ label: cat.title, value: String(cat.id) }))}
+                                    options={categories.map((opt) => ({
+                                        label:
+                                            <div style={{
+                                                color: opt.text_color,
+                                                backgroundColor: opt.background_color,
+                                                padding: '8px 16px',
+                                                borderRadius: '30px',
+                                                width: 'fit-content',
+                                            }}>
+                                                {opt.title}
+                                            </div>,
+                                        value: String(opt.id)
+                                    }))}
                                 />
                             </Form.Item>
                         </div>
