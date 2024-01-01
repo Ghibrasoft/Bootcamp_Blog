@@ -1,4 +1,4 @@
-import { DatePicker, Form, Image, Input, Tag } from "antd";
+import { ConfigProvider, DatePicker, Form, Image, Input, Tag } from "antd";
 import AddBlogStyles from "./AddBlog.module.scss";
 import {
     Button,
@@ -18,6 +18,13 @@ import { getToken } from "../../utils/helpers/getToken";
 import { fetchCategories } from "../../store/reducers/categories/categoriesSlice";
 import type { CustomTagProps } from 'rc-select/lib/BaseSelect';
 
+
+const getComponentStyles = (submittable: boolean) => {
+    return {
+        colorBgContainer: submittable ? '#F8FFF8' : 'var(--color-neutral-1)',
+        colorBorder: submittable ? '#14D81C' : 'var(--color-neutral-5)',
+    }
+}
 export default function AddBlog() {
     const [form] = Form.useForm();
     const dispatch = useAppDispatch();
@@ -177,203 +184,212 @@ export default function AddBlog() {
                 </div>
 
                 <div className={AddBlogStyles.addblog_section_content_formWrapper}>
-                    <Form
-                        form={form}
-                        className={AddBlogStyles.addblog_section_content_formWrapper_form}
-                        name="add_blog"
-                        layout="vertical"
-                        onFinish={onFinish}
-                    >
-                        {/* upload photo */}
-                        <Form.Item label="ატვირთეთ ფოტო">
-                            <Form.Item
-                                name="image"
-                                valuePropName="image"
-                                wrapperCol={{ span: 23 }}
-                                getValueFromEvent={normFile}
-                                rules={[
-                                    { required: true, message: '' }
-                                ]}
-                            >
-                                <Upload.Dragger
-                                    multiple
+                    <ConfigProvider
+                        theme={{
+                            components: {
+                                Input: getComponentStyles(submittable),
+                                Select: getComponentStyles(submittable),
+                                DatePicker: getComponentStyles(submittable)
+                            }
+                        }}>
+                        <Form
+                            form={form}
+                            className={AddBlogStyles.addblog_section_content_formWrapper_form}
+                            name="add_blog"
+                            layout="vertical"
+                            onFinish={onFinish}
+                        >
+                            {/* upload photo */}
+                            <Form.Item label="ატვირთეთ ფოტო">
+                                <Form.Item
                                     name="image"
-                                    listType="picture"
-                                    // accept=".png, .jpeg, .jpg"
-                                    accept="image/*"
-                                    beforeUpload={(file) => {
-                                        // console.log(file);
-                                        return false;
-                                    }}
+                                    valuePropName="image"
+                                    wrapperCol={{ span: 23 }}
+                                    getValueFromEvent={normFile}
+                                    rules={[
+                                        { required: true, message: '' }
+                                    ]}
                                 >
-                                    <Image
-                                        preview={false}
-                                        src={uploadIcon}
-                                        alt="upload-icon"
+                                    <Upload.Dragger
+                                        multiple
+                                        name="image"
+                                        listType="picture"
+                                        // accept=".png, .jpeg, .jpg"
+                                        accept="image/*"
+                                        beforeUpload={(file) => {
+                                            // console.log(file);
+                                            return false;
+                                        }}
+                                    >
+                                        <Image
+                                            preview={false}
+                                            src={uploadIcon}
+                                            alt="upload-icon"
+                                        />
+                                        <div>
+                                            <span>ჩააგდეთ ფაილი აქ ან</span>
+                                            <Button
+                                                size="small"
+                                                type="link"
+                                                htmlType="button"
+                                            >
+                                                აირჩიეთ ფაილი
+                                            </Button>
+                                        </div>
+                                    </Upload.Dragger>
+                                </Form.Item>
+                            </Form.Item>
+
+                            {/* group */}
+                            <div className={AddBlogStyles.addblog_section_content_formWrapper_form_group}>
+                                <Form.Item
+                                    className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item}
+                                    name="author"
+                                    label="ავტორი"
+                                    wrapperCol={{ span: 22 }}
+                                    rules={[{ required: true }]}
+                                    help={
+                                        <ul>
+                                            <li style={{ color: authorVal?.length >= 4 ? 'var(--color-success)' : validationColor.author }}>მინიმუმ 4 სიმბოლო</li>
+                                            <li style={{ color: authorVal && isMinTwoWords(authorVal) ? 'var(--color-success)' : validationColor.author }}>მინიმუმ ორი სიტყვა</li>
+                                            <li style={{ color: isGeorgian(authorVal) ? 'var(--color-success)' : validationColor.author }}>მხოლოდ ქართული სიმბოლოები</li>
+                                        </ul>
+                                    }
+                                >
+                                    <Input
+                                        size="large"
+                                        placeholder="შეიყვანეთ ავტორი..."
+                                        onBlur={() => onBlurHandler('author')}
                                     />
-                                    <div>
-                                        <span>ჩააგდეთ ფაილი აქ ან</span>
-                                        <Button
-                                            size="small"
-                                            type="link"
-                                            htmlType="button"
-                                        >
-                                            აირჩიეთ ფაილი
-                                        </Button>
-                                    </div>
-                                </Upload.Dragger>
-                            </Form.Item>
-                        </Form.Item>
+                                </Form.Item>
 
-                        {/* group */}
-                        <div className={AddBlogStyles.addblog_section_content_formWrapper_form_group}>
+                                <Form.Item
+                                    className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item}
+                                    name="title"
+                                    label="სათაური"
+                                    wrapperCol={{ span: 22 }}
+                                    rules={[{ required: true }]}
+                                    help={<small style={{ color: titleVal?.length >= 4 ? 'var(--color-success)' : validationColor.title }}>მინიმუმ 4 სიმბოლო</small>}
+                                >
+                                    <Input
+                                        size="large"
+                                        placeholder="შეიყვანეთ სათაური..."
+                                        onBlur={() => onBlurHandler('title')}
+                                    />
+                                </Form.Item>
+                            </div>
+
+                            {/* description */}
                             <Form.Item
-                                className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item}
-                                name="author"
-                                label="ავტორი"
-                                wrapperCol={{ span: 22 }}
+                                name="description"
+                                label="აღწერა"
+                                wrapperCol={{ span: 23 }}
                                 rules={[{ required: true }]}
-                                help={
-                                    <ul>
-                                        <li style={{ color: authorVal?.length >= 4 ? 'var(--color-success)' : validationColor.author }}>მინიმუმ 4 სიმბოლო</li>
-                                        <li style={{ color: authorVal && isMinTwoWords(authorVal) ? 'var(--color-success)' : validationColor.author }}>მინიმუმ ორი სიტყვა</li>
-                                        <li style={{ color: isGeorgian(authorVal) ? 'var(--color-success)' : validationColor.author }}>მხოლოდ ქართული სიმბოლოები</li>
-                                    </ul>
-                                }
+                                help={<small style={{ color: descVal?.length >= 4 ? 'var(--color-success)' : validationColor.description }}>მინიმუმ 4 სიმბოლო</small>}
+                            >
+                                <Input.TextArea
+                                    rows={3}
+                                    size="large"
+                                    style={{ resize: 'none' }}
+                                    placeholder="შეიყვანეთ აღწერა..."
+                                    onBlur={() => onBlurHandler('description')}
+                                />
+                            </Form.Item>
+
+                            {/* group */}
+                            <div className={AddBlogStyles.addblog_section_content_formWrapper_form_group}>
+                                <Form.Item
+                                    className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item}
+                                    // hasFeedback
+                                    name="publish_date"
+                                    label="გამოქვეყნების თარიღი"
+                                    rules={[
+                                        { required: true, message: '' }
+                                    ]}
+                                    wrapperCol={{ span: 22 }}
+                                >
+                                    <DatePicker
+                                        className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item_datepicker}
+                                        size="large"
+                                        placeholder="12/12/2023"
+                                    />
+                                </Form.Item>
+
+                                <Form.Item
+                                    className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item}
+                                    name="categories"
+                                    label="კატეგორია"
+                                    wrapperCol={{ span: 22 }}
+                                    rules={[
+                                        { required: true, message: '' }
+                                    ]}
+                                >
+                                    <Select
+                                        allowClear
+                                        size="large"
+                                        mode="multiple"
+                                        placeholder="აიჩიეთ კატეგორია"
+                                        tagRender={tagRender}
+                                        options={categories.map((opt) => ({
+                                            label:
+                                                <div style={{
+                                                    color: opt.text_color,
+                                                    backgroundColor: opt.background_color,
+                                                    padding: '8px 16px',
+                                                    borderRadius: '30px',
+                                                    width: 'fit-content',
+                                                }}>
+                                                    {opt.title}
+                                                </div>,
+                                            value: String(opt.id)
+                                        }))}
+                                    />
+                                </Form.Item>
+                            </div>
+
+                            {/* email */}
+                            <Form.Item
+                                name="email"
+                                label="ელ-ფოსტა"
+                                validateTrigger="onBlur"
+                                wrapperCol={{ span: 11 }}
+                                rules={[
+                                    { required: true, message: '' },
+                                    {
+                                        validator: (_, value) => {
+                                            if (value && !value.endsWith('@redberry.ge')) {
+                                                return Promise.reject(
+                                                    <>
+                                                        <InfoCircleFilled style={{ marginRight: 8 }} />
+                                                        <span style={{ fontSize: '12px' }}>მეილი უნდა მთავრდებოდეს @redberry.ge-ით</span>
+                                                    </>);
+                                            }
+                                            return Promise.resolve();
+                                        },
+                                    }
+                                ]}
                             >
                                 <Input
                                     size="large"
-                                    placeholder="შეიყვანეთ ავტორი..."
-                                    onBlur={() => onBlurHandler('author')}
+                                    placeholder="Example@redberry.ge..."
                                 />
                             </Form.Item>
 
                             <Form.Item
-                                className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item}
-                                name="title"
-                                label="სათაური"
-                                wrapperCol={{ span: 22 }}
-                                rules={[{ required: true }]}
-                                help={<small style={{ color: titleVal?.length >= 4 ? 'var(--color-success)' : validationColor.title }}>მინიმუმ 4 სიმბოლო</small>}
+                                className={AddBlogStyles.addblog_section_content_formWrapper_form_itemButton}
                             >
-                                <Input
+                                <Button
                                     size="large"
-                                    placeholder="შეიყვანეთ სათაური..."
-                                    onBlur={() => onBlurHandler('title')}
-                                />
+                                    type="primary"
+                                    htmlType="submit"
+                                    disabled={!submittable}
+                                    loading={addBlogData.loading}
+                                >
+                                    გამოქვეყნება
+                                </Button>
                             </Form.Item>
-                        </div>
-
-                        {/* description */}
-                        <Form.Item
-                            name="description"
-                            label="აღწერა"
-                            wrapperCol={{ span: 23 }}
-                            rules={[{ required: true }]}
-                            help={<small style={{ color: descVal?.length >= 4 ? 'var(--color-success)' : validationColor.description }}>მინიმუმ 4 სიმბოლო</small>}
-                        >
-                            <Input.TextArea
-                                rows={3}
-                                size="large"
-                                style={{ resize: 'none' }}
-                                placeholder="შეიყვანეთ აღწერა..."
-                                onBlur={() => onBlurHandler('description')}
-                            />
-                        </Form.Item>
-
-                        {/* group */}
-                        <div className={AddBlogStyles.addblog_section_content_formWrapper_form_group}>
-                            <Form.Item
-                                className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item}
-                                // hasFeedback
-                                name="publish_date"
-                                label="გამოქვეყნების თარიღი"
-                                rules={[
-                                    { required: true, message: '' }
-                                ]}
-                                wrapperCol={{ span: 22 }}
-                            >
-                                <DatePicker
-                                    className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item_datepicker}
-                                    size="large"
-                                    placeholder="12/12/2023"
-                                />
-                            </Form.Item>
-
-                            <Form.Item
-                                className={AddBlogStyles.addblog_section_content_formWrapper_form_group_item}
-                                name="categories"
-                                label="კატეგორია"
-                                wrapperCol={{ span: 22 }}
-                                rules={[
-                                    { required: true, message: '' }
-                                ]}
-                            >
-                                <Select
-                                    allowClear
-                                    size="large"
-                                    mode="multiple"
-                                    placeholder="აიჩიეთ კატეგორია"
-                                    tagRender={tagRender}
-                                    options={categories.map((opt) => ({
-                                        label:
-                                            <div style={{
-                                                color: opt.text_color,
-                                                backgroundColor: opt.background_color,
-                                                padding: '8px 16px',
-                                                borderRadius: '30px',
-                                                width: 'fit-content',
-                                            }}>
-                                                {opt.title}
-                                            </div>,
-                                        value: String(opt.id)
-                                    }))}
-                                />
-                            </Form.Item>
-                        </div>
-
-                        {/* email */}
-                        <Form.Item
-                            name="email"
-                            label="ელ-ფოსტა"
-                            validateTrigger="onBlur"
-                            wrapperCol={{ span: 11 }}
-                            rules={[
-                                { required: true, message: '' },
-                                {
-                                    validator: (_, value) => {
-                                        if (value && !value.endsWith('@redberry.ge')) {
-                                            return Promise.reject(
-                                                <>
-                                                    <InfoCircleFilled style={{ marginRight: 8 }} />
-                                                    <span style={{ fontSize: '12px' }}>მეილი უნდა მთავრდებოდეს @redberry.ge-ით</span>
-                                                </>);
-                                        }
-                                        return Promise.resolve();
-                                    },
-                                }
-                            ]}
-                        >
-                            <Input
-                                size="large"
-                                placeholder="Example@redberry.ge..."
-                            />
-                        </Form.Item>
-
-                        <Form.Item
-                            className={AddBlogStyles.addblog_section_content_formWrapper_form_itemButton}
-                        >
-                            <Button
-                                size="large"
-                                type="primary"
-                                htmlType="submit"
-                                disabled={!submittable}
-                                loading={addBlogData.loading}
-                            >
-                                გამოქვეყნება
-                            </Button>
-                        </Form.Item>
-                    </Form>
+                        </Form>
+                    </ConfigProvider>
                 </div>
             </div>
         </section>
