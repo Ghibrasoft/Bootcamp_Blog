@@ -1,20 +1,20 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { IAddBlogProps, IErrorResponse } from "../../../types/blogType";
+import { IFormDataProps, IErrorResponse } from "../../../types/blogType";
 
 interface IAddBlogData {
-  blogData: IAddBlogProps;
+  formData: IFormDataProps;
   token: string;
 }
 export const addBlog = createAsyncThunk<
-  any,
+  IFormDataProps,
   IAddBlogData,
   { rejectValue: IErrorResponse }
->("blogs/addblog", async ({ blogData, token }, { rejectWithValue }) => {
+>("blogs/addblog", async ({ formData, token }, { rejectWithValue }) => {
   try {
     const res = await axios.post(
       "https://api.blog.redberryinternship.ge/api/blogs",
-      blogData,
+      formData,
       {
         headers: {
           Authorization: `Bearer ${token}`,

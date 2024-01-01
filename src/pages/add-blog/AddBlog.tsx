@@ -1,4 +1,4 @@
-import { ConfigProvider, DatePicker, Form, Image, Input, Tag } from "antd";
+import { ConfigProvider, DatePicker, Form, Image, Input, Modal, Result, Tag, message } from "antd";
 import AddBlogStyles from "./AddBlog.module.scss";
 import {
     Button,
@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import { getToken } from "../../utils/helpers/getToken";
 import { fetchCategories } from "../../store/reducers/categories/categoriesSlice";
 import type { CustomTagProps } from 'rc-select/lib/BaseSelect';
+import { IFormDataProps } from "../../types/blogType";
 
 
 const getComponentStyles = (submittable: boolean) => {
@@ -30,6 +31,7 @@ export default function AddBlog() {
     const dispatch = useAppDispatch();
     const addBlogData = useSelector((state: RootState) => state.addBlog)
     const categories = useSelector((state: RootState) => state.categories.data);
+    const [openModal, setOpenModal] = useState(true)
 
     // select
     const tagRender = (props: CustomTagProps) => {
@@ -144,19 +146,25 @@ export default function AddBlog() {
                 break;
         }
     }
-    const onFinish = async (values: any) => {
-        // console.log(values);
+    const onFinish = async (values: IFormDataProps) => {
         try {
             const token = await getToken();
 
             const imageFile = values.image[0].originFileObj;
-            const imageBase64 = await getBase64(imageFile);
-            const blogData = { ...values, image: imageBase64 };
+            console.log(typeof values.image[0].originFileObj)
 
-            console.log(blogData);
-            // dispatch(addBlog(formData));
+            const formData = new FormData();
+            formData.append('image', imageFile);
+            formData.append('author', values.author);
+            formData.append('title', values.title);
+            formData.append('description', values.description);
+            formData.append('publish_date', values.publish_date);
+            formData.append('categories', JSON.stringify(values.categories));
+            formData.append('email', values.email);
+
+            console.log(formData)
             if (token) {
-                dispatch(addBlog({ blogData, token }));
+                dispatch(addBlog({ formData, token } as any));
             } else {
                 console.error("Token isn't available!")
             }
@@ -392,6 +400,29 @@ export default function AddBlog() {
                     </ConfigProvider>
                 </div>
             </div>
+            <Modal
+                open={openModal}  // need fix
+                onCancel={() => { setOpenModal(false) }}
+                okButtonProps={{ style: { display: 'none' } }}
+                cancelButtonProps={{ style: { display: 'none' } }}
+            >
+                <Result
+                    style={{ padding: 0 }}
+                    status="success"
+                    title={<h3>ჩანაწერი წარმატებით დაემატა</h3>}
+                    extra={
+                        <Button
+                            block
+                            size="large"
+                            type="primary"
+                            htmlType="button"
+                            onClick={() => setOpenModal(false)}
+                        >
+                            მთავარ გვერდზე დაბრუნება
+                        </Button>
+                    }
+                />
+            </Modal>
         </section>
     )
 }

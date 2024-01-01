@@ -15,13 +15,14 @@ export interface IBlogProps {
   categories: ICategories[];
   author: string;
 }
-export interface IAddBlogProps {
+export interface IFormDataProps {
   title: string;
   description: string;
-  image: string;
+  image: any;
   publish_date: string;
-  categories: string;
+  categories: string[];
   author: string;
+  email: string;
 }
 export interface IErrorResponse {
   message: string;
