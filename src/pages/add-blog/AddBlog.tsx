@@ -166,7 +166,9 @@ export default function AddBlog() {
                 }
             });
 
-            console.log(...formData);
+            formData.forEach((value, key) => {
+                console.log(key, value);
+            });
 
             dispatch(addBlog({ formData, token }));
         } catch (error) {
