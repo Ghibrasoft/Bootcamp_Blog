@@ -3,12 +3,14 @@ import loginSlice from "./reducers/login/loginSlice";
 import addBlogSlice from "./reducers/add-blog/addBlogSlice";
 import blogsSlice from "./reducers/blogs/blogsSlice";
 import { useDispatch } from "react-redux";
+import categoriesSlice from "./reducers/categories/categoriesSlice";
 
 export const store = configureStore({
   reducer: {
     login: loginSlice,
-    blogs: blogsSlice,
+    getBlogs: blogsSlice,
     addBlog: addBlogSlice,
+    getCategories: categoriesSlice,
   },
 });
 

@@ -1,18 +1,22 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { IAddBlogProps, IErrorResponse } from "../../../types/blogType";
+import { IErrorResponse } from "../../../types/blogType";
 
 export const addBlog = createAsyncThunk<
-  any,
-  IAddBlogProps,
+  void,
+  { formData: FormData; token: string },
   { rejectValue: IErrorResponse }
->("blogs/addblog", async (blogData, { rejectWithValue }) => {
+>("blogs/addblog", async ({ formData, token }, { rejectWithValue }) => {
   try {
-    const res = await axios.post(
+    await axios.post(
       "https://api.blog.redberryinternship.ge/api/blogs",
-      blogData
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
-    return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response) {
@@ -46,7 +50,7 @@ const addBlogSlice = createSlice({
       .addCase(addBlog.fulfilled, (state) => {
         state.loading = false;
       })
-      .addCase(addBlog.rejected, (state, action: any) => {
+      .addCase(addBlog.rejected, (state, action) => {
         state.loading = false;
         if (action.payload) {
           state.error = action.payload;

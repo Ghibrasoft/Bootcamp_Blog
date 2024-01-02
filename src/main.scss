@@ -7,3 +7,38 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+/* style the scrollbar */
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: var(--color-layout);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--color-primary-hover);
+    border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-primary);
+}
+
+::selection {
+    background-color: var(--color-primary);
+    color: var(--color-neutral-1);
+}
+
+/* firefox */
+::-moz-selection {
+    background-color: var(--color-primary);
+    color: var(--color-neutral-1);
+}
+
+/* webKit/blink */
+::-webkit-selection {
+    background-color: var(--color-primary);
+    color: var(--color-neutral-1);
+}

@@ -1,20 +1,34 @@
-import { Button, Form, Image, Input, Modal, Result, Spin } from "antd";
-import { Link, useNavigate } from "react-router-dom";
-import NavBarStyles from "./NavBar.module.scss";
-
 import brandLogo from "/brandLogo.svg";
-import { useState } from "react";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import NavBarStyles from "./NavBar.module.scss";
+import { useAppDispatch } from "../../store/store";
+import { Link, useNavigate } from "react-router-dom";
+import { getToken } from "../../utils/helpers/getToken";
+import { loggedUser } from "../../store/selectors/login";
+import { Button, Form, Image, Input, Modal, Result } from "antd";
 import { loginUser } from "../../store/reducers/login/loginSlice";
-import { RootState, useAppDispatch } from "../../store/store";
+import { fetchBlogData } from "../../store/reducers/blogs/blogsSlice";
+
 
 
 const NavBar = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const userData = useSelector((state: RootState) => state.login);
+    const userData = useSelector(loggedUser);
     const [modalForm] = Form.useForm();
     const [openModal, setOpenModal] = useState(false);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (userData.isLogged) {
+                const token = await getToken();
+                dispatch(fetchBlogData(token))
+            }
+        }
+
+        fetchData();
+    }, [dispatch, userData.isLogged]);
 
     return (
         <>
@@ -33,7 +47,7 @@ const NavBar = () => {
                         type="primary"
                         htmlType="button"
                     >
-                        Add Blog
+                        დაამატე ბლოგი
                     </Button>
                 </Link>
                 :
@@ -43,17 +57,18 @@ const NavBar = () => {
                     htmlType="button"
                     onClick={() => setOpenModal(true)}
                 >
-                    Log in
+                    შესვლა
                 </Button>
             }
 
             <Modal
                 open={openModal}
-                title="Log in"
-                okText="Log in"
-                okButtonProps={{ style: { display: userData.isLogged ? 'none' : 'inline' } }}
-                onCancel={() => { setOpenModal(false); modalForm.resetFields() }}
+                title="შესვლა"
+                okText="შესვლა"
+                confirmLoading={userData.loading}
                 cancelButtonProps={{ style: { display: 'none' } }}
+                onCancel={() => { setOpenModal(false); modalForm.resetFields() }}
+                okButtonProps={{ style: { display: userData.isLogged ? 'none' : 'inline' } }}
                 onOk={async () => {
                     try {
                         await modalForm.validateFields();
@@ -67,46 +82,46 @@ const NavBar = () => {
             >
                 {userData.isLogged ?
                     <Result
+                        style={{ padding: 0 }}
                         status="success"
-                        title="Authorization success"
+                        title="წარმატებული ავტორიზაცია"
                         extra={
                             <Button
+                                block
                                 size="large"
                                 type="primary"
                                 htmlType="button"
                                 onClick={() => setOpenModal(false)}
                             >
-                                Ok
+                                კარგი
                             </Button>
                         }
                     />
                     :
-                    <Spin spinning={userData.loading}>
-                        <Form
-                            form={modalForm}
-                            layout="vertical"
-                            name="login_form"
-                            initialValues={{ modifier: 'public' }}
+                    <Form
+                        form={modalForm}
+                        layout="vertical"
+                        name="login_form"
+                        initialValues={{ modifier: 'public' }}
+                    >
+                        <Form.Item
+                            name="email"
+                            label="ელ-ფოსტა"
+                            validateTrigger="onBlur"
+                            rules={[
+                                { required: true, message: '' },
+                                { type: 'email' },
+                                { whitespace: true }
+                            ]}
+                            help={userData.error &&
+                                <span style={{ color: 'var(--color-error)' }}>
+                                    {userData.error.message}
+                                </span>
+                            }
                         >
-                            <Form.Item
-                                name="email"
-                                label="Email"
-                                validateTrigger="onBlur"
-                                rules={[
-                                    { required: true },
-                                    { type: 'email' },
-                                    { whitespace: true }
-                                ]}
-                                help={userData.error &&
-                                    <span style={{ color: 'var(--color-error)' }}>
-                                        {userData.error}
-                                    </span>
-                                }
-                            >
-                                <Input placeholder="Example@redberry.ge" />
-                            </Form.Item>
-                        </Form>
-                    </Spin>
+                            <Input placeholder="Example@redberry.ge" />
+                        </Form.Item>
+                    </Form>
                 }
             </Modal>
         </>

@@ -1,35 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-
-interface ILoginFormData {
-  email: string;
-}
-interface ILoginStateType {
-  isLogged: boolean;
-  loading: boolean;
-  error: IErrorResponse | null;
-}
-interface IErrorResponse {
-  message: string;
-  errors: {
-    email?: string[];
-  };
-}
-const initialState: ILoginStateType = {
-  isLogged: false,
-  loading: false,
-  error: null,
-};
+import { IErrorResponse } from "../../../types/blogType";
 
 export const loginUser = createAsyncThunk<
   any,
-  ILoginFormData,
+  string,
   { rejectValue: IErrorResponse }
->("login/loginUser", async (formData, { rejectWithValue }) => {
+>("login/loginUser", async (userEmail, { rejectWithValue }) => {
   try {
     const res = await axios.post(
       "https://api.blog.redberryinternship.ge/api/login",
-      formData
+      userEmail
     );
     return res.data;
   } catch (error) {
@@ -45,6 +26,17 @@ export const loginUser = createAsyncThunk<
   }
 });
 
+interface ILoginStateType {
+  isLogged: boolean;
+  loading: boolean;
+  error: IErrorResponse | null;
+}
+
+const initialState: ILoginStateType = {
+  isLogged: false,
+  loading: false,
+  error: null,
+};
 const loginSlice = createSlice({
   name: "login",
   initialState,
