@@ -154,18 +154,19 @@ export default function AddBlog() {
                 console.error("Token isn't available!");
                 return;
             }
-            const imageFile = values.image[0].originFileObj;
 
             const formData = new FormData();
-            formData.append('image', imageFile);
-            formData.append('author', values.author);
-            formData.append('title', values.title);
-            formData.append('description', values.description);
-            formData.append('publish_date', values.publish_date);
-            formData.append('categories', JSON.stringify(values.categories));
-            formData.append('email', values.email);
+            Object.entries(values).forEach(([key, value]) => {
+                if (key === 'image') {
+                    formData.append(key, value[0].originFileObj);
+                } else if (key === 'categories') {
+                    formData.append(key, JSON.stringify(value));
+                } else {
+                    formData.append(key, value);
+                }
+            });
 
-            // console.log(formData)
+            console.log(...formData);
 
             dispatch(addBlog({ formData, token }));
         } catch (error) {

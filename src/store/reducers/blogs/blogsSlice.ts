@@ -16,8 +16,7 @@ export const fetchBlogData = createAsyncThunk<
         },
       }
     );
-    // console.log(res.data);
-    return res.data;
+    return res.data.data;
   } catch (error: any) {
     return rejectWithValue(error.message);
   }

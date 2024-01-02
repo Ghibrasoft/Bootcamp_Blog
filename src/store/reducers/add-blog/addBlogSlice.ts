@@ -8,7 +8,7 @@ export const addBlog = createAsyncThunk<
   { rejectValue: IErrorResponse }
 >("blogs/addblog", async ({ formData, token }, { rejectWithValue }) => {
   try {
-    const res = await axios.post(
+    await axios.post(
       "https://api.blog.redberryinternship.ge/api/blogs",
       formData,
       {
@@ -17,7 +17,6 @@ export const addBlog = createAsyncThunk<
         },
       }
     );
-    return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response) {
