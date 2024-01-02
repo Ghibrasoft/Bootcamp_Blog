@@ -1,17 +1,17 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { IErrorResponse } from "../../../types/blogType";
+import { ICategories, IErrorResponse } from "../../../types/blogType";
 
 export const fetchCategories = createAsyncThunk<
-  any,
-  any,
+  ICategories[],
+  void,
   { rejectValue: IErrorResponse }
->("blogs/categories", async ({ rejectWithValue }) => {
+>("blogs/categories", async (_, { rejectWithValue }) => {
   try {
     const res = await axios.get(
       "https://api.blog.redberryinternship.ge/api/categories"
     );
-    return res.data;
+    return res.data.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response) {
@@ -25,14 +25,8 @@ export const fetchCategories = createAsyncThunk<
   }
 });
 
-interface IDataProps {
-  id: number;
-  title: string;
-  text_color: string;
-  background_color: string;
-}
 interface ICategoriesState {
-  data: IDataProps[];
+  data: ICategories[];
   loading: boolean;
   error: IErrorResponse | null;
 }
@@ -51,10 +45,13 @@ const categoriesSlice = createSlice({
       .addCase(fetchCategories.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchCategories.fulfilled, (state, action) => {
-        state.loading = false;
-        state.data = action.payload.data;
-      })
+      .addCase(
+        fetchCategories.fulfilled,
+        (state, action: PayloadAction<ICategories[]>) => {
+          state.loading = false;
+          state.data = action.payload;
+        }
+      )
       .addCase(fetchCategories.rejected, (state, action) => {
         state.loading = false;
         if (action.payload) {

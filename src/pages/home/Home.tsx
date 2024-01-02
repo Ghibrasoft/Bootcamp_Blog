@@ -1,18 +1,30 @@
 import blogImg from "/blog.svg";
+import { useEffect } from "react";
 import { Button, Image } from "antd";
-import HomeStyles from "./Home.module.scss";
-import { FILTER_LIST } from "../../utils/constants/filter-list/filterList";
 import { useSelector } from "react-redux";
-import { RootState, useAppDispatch } from "../../store/store";
+import HomeStyles from "./Home.module.scss";
+import { useAppDispatch } from "../../store/store";
+import { blogs } from "../../store/selectors/blogs";
+import { getToken } from "../../utils/helpers/getToken";
+import { fetchBlogData } from "../../store/reducers/blogs/blogsSlice";
+import { FILTER_LIST } from "../../utils/constants/filter-list/filterList";
 
 
 
 export default function Home() {
     const dispatch = useAppDispatch();
-    const blogs = useSelector((state: RootState) => state.blogs.data);
+    const blogsData = useSelector(blogs);
 
-    console.log(blogs);
 
+    useEffect(() => {
+        const fetchBlogs = async () => {
+            const token = await getToken();
+            dispatch(fetchBlogData(token))
+        }
+        fetchBlogs();
+    }, [])
+
+    // console.log('Home:', blogsData);
     return (
         <section className={HomeStyles.home_section}>
             <div className={HomeStyles.home_section_top}>
@@ -45,7 +57,7 @@ export default function Home() {
             </div>
 
             <div>
-                {blogs.map((item: any) => (
+                {blogsData.map((item: any) => (
                     <div>{item.title}</div>
                 ))}
             </div>

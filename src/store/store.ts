@@ -8,9 +8,9 @@ import categoriesSlice from "./reducers/categories/categoriesSlice";
 export const store = configureStore({
   reducer: {
     login: loginSlice,
-    blogs: blogsSlice,
+    getBlogs: blogsSlice,
     addBlog: addBlogSlice,
-    categories: categoriesSlice,
+    getCategories: categoriesSlice,
   },
 });
 

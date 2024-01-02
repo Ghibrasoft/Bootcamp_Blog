@@ -1,23 +1,26 @@
-import { ConfigProvider, DatePicker, Form, Image, Input, Modal, Result, Tag, message } from "antd";
+import uploadIcon from "/upload.svg";
+import arrowLeft from "/arrowLeft.svg";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import AddBlogStyles from "./AddBlog.module.scss";
+import { useAppDispatch } from "../../store/store";
+import { InfoCircleFilled } from "@ant-design/icons";
+import { IFormDataProps } from "../../types/blogType";
+import { getToken } from "../../utils/helpers/getToken";
+import { isGeorgian } from "../../utils/helpers/isGeorgian";
+import { addBlogData } from "../../store/selectors/addBlog";
+import type { CustomTagProps } from 'rc-select/lib/BaseSelect';
+import { isMinTwoWords } from "../../utils/helpers/isMinTwoWords";
+import { categoriesData } from "../../store/selectors/categories";
+import { addBlog } from "../../store/reducers/add-blog/addBlogSlice";
+import { fetchCategories } from "../../store/reducers/categories/categoriesSlice";
+import { ConfigProvider, DatePicker, Form, Image, Input, Modal, Result, Tag } from "antd";
 import {
     Button,
     Select,
     Upload,
 } from 'antd';
-import { addBlog } from "../../store/reducers/add-blog/addBlogSlice";
-import { RootState, useAppDispatch } from "../../store/store";
-import { isMinTwoWords } from "../../utils/helpers/isMinTwoWords";
-import { isGeorgian } from "../../utils/helpers/isGeorgian";
-import uploadIcon from "/upload.svg";
-import arrowLeft from "/arrowLeft.svg";
-import { useEffect, useState } from "react";
-import { InfoCircleFilled } from "@ant-design/icons";
-import { useSelector } from "react-redux";
-import { getToken } from "../../utils/helpers/getToken";
-import { fetchCategories } from "../../store/reducers/categories/categoriesSlice";
-import type { CustomTagProps } from 'rc-select/lib/BaseSelect';
-import { IFormDataProps } from "../../types/blogType";
 
 
 const getComponentStyles = (submittable: boolean) => {
@@ -29,9 +32,10 @@ const getComponentStyles = (submittable: boolean) => {
 export default function AddBlog() {
     const [form] = Form.useForm();
     const dispatch = useAppDispatch();
-    const addBlogData = useSelector((state: RootState) => state.addBlog)
-    const categories = useSelector((state: RootState) => state.categories.data);
+    const addedBlogData = useSelector(addBlogData)
+    const categories = useSelector(categoriesData);
     const [openModal, setOpenModal] = useState(false);
+
 
     // select
     const tagRender = (props: CustomTagProps) => {
@@ -67,29 +71,12 @@ export default function AddBlog() {
     };
     useEffect(() => {
         const fetchCategoriesData = () => {
-            dispatch(fetchCategories(''))
+            dispatch(fetchCategories())
         }
         fetchCategoriesData()
     }, []);
 
-    // image
-    const getBase64 = (file: File): Promise<string> => {
-        return new Promise<string>((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsArrayBuffer(file);
-
-            reader.onload = () => {
-                const arrayBuffer = reader.result as ArrayBuffer;
-                const binaryString = Array.from(new Uint8Array(arrayBuffer))
-                    .map((byte) => String.fromCharCode(byte))
-                    .join('');
-
-                resolve(binaryString);
-            };
-
-            reader.onerror = (error) => reject(error);
-        });
-    };
+    // image upload 
     const normFile = (e: any) => {
         // console.log('Upload event:', e);
         if (Array.isArray(e)) {
@@ -166,15 +153,17 @@ export default function AddBlog() {
                 }
             });
 
-            formData.forEach((value, key) => {
-                console.log(key, value);
-            });
+            // formData.forEach((value, key) => {
+            //     console.log(key, value);
+            // });
 
             dispatch(addBlog({ formData, token }));
+            setOpenModal(true);
         } catch (error) {
             console.error("Error in onFinish:", error);
         }
     };
+
 
     return (
         <section className={AddBlogStyles.addblog_section}>
@@ -189,6 +178,7 @@ export default function AddBlog() {
                     preview={false}
                 />
             </div>
+
             <div className={AddBlogStyles.addblog_section_content}>
                 <div className={AddBlogStyles.addblog_section_content_title}>
                     <h1>ბლოგის დამატება</h1>
@@ -225,12 +215,10 @@ export default function AddBlog() {
                                         name="image"
                                         listType="picture"
                                         accept=".png, .jpeg, .jpg"
-                                        beforeUpload={(file) => {
-                                            // console.log(file);
+                                        beforeUpload={() => {
                                             return false;
                                         }}
                                     // multiple
-                                    // accept="image/*"
                                     >
                                         <Image
                                             preview={false}
@@ -388,13 +376,14 @@ export default function AddBlog() {
 
                             <Form.Item
                                 className={AddBlogStyles.addblog_section_content_formWrapper_form_itemButton}
+                            // wrapperCol={{ span: 11 }}
                             >
                                 <Button
                                     size="large"
                                     type="primary"
                                     htmlType="submit"
                                     disabled={!submittable}
-                                    loading={addBlogData.loading}
+                                    loading={addedBlogData.loading}
                                 >
                                     გამოქვეყნება
                                 </Button>
@@ -402,9 +391,9 @@ export default function AddBlog() {
                         </Form>
                     </ConfigProvider>
                 </div>
-            </div>
+            </div >
             <Modal
-                open={openModal}  // need fix
+                open={openModal}
                 onCancel={() => { setOpenModal(false) }}
                 okButtonProps={{ style: { display: 'none' } }}
                 cancelButtonProps={{ style: { display: 'none' } }}
@@ -414,18 +403,20 @@ export default function AddBlog() {
                     status="success"
                     title={<h3>ჩანაწერი წარმატებით დაემატა</h3>}
                     extra={
-                        <Button
-                            block
-                            size="large"
-                            type="primary"
-                            htmlType="button"
-                            onClick={() => setOpenModal(false)}
-                        >
-                            მთავარ გვერდზე დაბრუნება
-                        </Button>
+                        <Link to={"/"}>
+                            <Button
+                                block
+                                size="large"
+                                type="primary"
+                                htmlType="button"
+                                onClick={() => setOpenModal(false)}
+                            >
+                                მთავარ გვერდზე დაბრუნება
+                            </Button>
+                        </Link>
                     }
                 />
             </Modal>
-        </section>
+        </section >
     )
 }

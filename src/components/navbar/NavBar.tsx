@@ -1,20 +1,21 @@
-import { Button, Form, Image, Input, Modal, Result } from "antd";
-import { Link, useNavigate } from "react-router-dom";
-import NavBarStyles from "./NavBar.module.scss";
-
 import brandLogo from "/brandLogo.svg";
-import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { loginUser } from "../../store/reducers/login/loginSlice";
-import { RootState, useAppDispatch } from "../../store/store";
+import { useEffect, useState } from "react";
+import NavBarStyles from "./NavBar.module.scss";
+import { useAppDispatch } from "../../store/store";
+import { Link, useNavigate } from "react-router-dom";
 import { getToken } from "../../utils/helpers/getToken";
+import { loggedUser } from "../../store/selectors/login";
+import { Button, Form, Image, Input, Modal, Result } from "antd";
+import { loginUser } from "../../store/reducers/login/loginSlice";
 import { fetchBlogData } from "../../store/reducers/blogs/blogsSlice";
+
 
 
 const NavBar = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const userData = useSelector((state: RootState) => state.login);
+    const userData = useSelector(loggedUser);
     const [modalForm] = Form.useForm();
     const [openModal, setOpenModal] = useState(false);
 

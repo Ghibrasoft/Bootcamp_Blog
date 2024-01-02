@@ -4,7 +4,7 @@ import { IErrorResponse } from "../../../types/blogType";
 
 export const addBlog = createAsyncThunk<
   void,
-  any,
+  { formData: FormData; token: string },
   { rejectValue: IErrorResponse }
 >("blogs/addblog", async ({ formData, token }, { rejectWithValue }) => {
   try {

@@ -1,11 +1,12 @@
-// blog
-interface ICategories {
+// blog categories
+export interface ICategories {
   id: number;
-  name: string;
+  title: string;
   text_color: string;
   background_color: string;
 }
 
+// fetch blog by id
 export interface IBlogProps {
   id: number;
   title: string;
@@ -14,7 +15,10 @@ export interface IBlogProps {
   publish_date: string;
   categories: ICategories[];
   author: string;
+  email: string;
 }
+
+// blog post
 export interface IFormDataProps {
   title: string;
   description: string;
@@ -24,6 +28,8 @@ export interface IFormDataProps {
   author: string;
   email: string;
 }
+
+// error response
 export interface IErrorResponse {
   message: string;
   errors: {
