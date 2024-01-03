@@ -21,8 +21,8 @@
     &_bottom {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        margin: 64px auto;
-        gap: 12px;
+        margin: var(--space-xxl) auto;
+        gap: var(--space-under-md);
 
         &_card {
             background-color: inherit;
@@ -30,7 +30,7 @@
             width: 400px;
 
             &_image {
-                border-radius: 12px !important;
+                border-radius: var(--space-under-md) !important;
                 object-fit: cover;
             }
 
@@ -52,12 +52,12 @@
             &_content {
                 display: flex;
                 flex-direction: column;
-                gap: 16px;
-                margin: 16px auto;
+                gap: var(--space-md);
+                margin: var(--space-md) auto;
 
                 ul {
                     justify-content: start;
-                    gap: 16px;
+                    gap: var(--space-md);
                 }
 
                 &_desc {

@@ -109,7 +109,7 @@ export default function Home() {
                                 {description}
                             </p>
                             <Link
-                                to={"#"}
+                                to={`/${id}`}
                                 className={HomeStyles.home_section_bottom_card_content_link}
                             >
                                 სრულად ნახვა
