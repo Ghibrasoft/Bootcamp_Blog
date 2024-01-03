@@ -1,8 +1,8 @@
+import { useDispatch } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import loginSlice from "./reducers/login/loginSlice";
-import addBlogSlice from "./reducers/add-blog/addBlogSlice";
 import blogsSlice from "./reducers/blogs/blogsSlice";
-import { useDispatch } from "react-redux";
+import addBlogSlice from "./reducers/add-blog/addBlogSlice";
 import categoriesSlice from "./reducers/categories/categoriesSlice";
 
 export const store = configureStore({

@@ -15,7 +15,6 @@ export interface IBlogProps {
   publish_date: string;
   categories: ICategories[];
   author: string;
-  email: string;
 }
 
 // blog post

@@ -42,3 +42,18 @@
     background-color: var(--color-primary);
     color: var(--color-neutral-1);
 }
+
+.category-list {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+
+    li {
+
+        button {
+            box-shadow: none;
+        }
+    }
+}

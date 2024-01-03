@@ -5,9 +5,9 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import AddBlogStyles from "./AddBlog.module.scss";
 import { useAppDispatch } from "../../store/store";
+import { token } from "../../utils/constants/token";
 import { InfoCircleFilled } from "@ant-design/icons";
 import { IFormDataProps } from "../../types/blogType";
-import { getToken } from "../../utils/helpers/getToken";
 import { isGeorgian } from "../../utils/helpers/isGeorgian";
 import { addBlogData } from "../../store/selectors/addBlog";
 import type { CustomTagProps } from 'rc-select/lib/BaseSelect';
@@ -136,11 +136,11 @@ export default function AddBlog() {
     const onFinish = async (values: IFormDataProps) => {
         // console.log(values)
         try {
-            const token = await getToken();
-            if (!token) {
-                console.error("Token isn't available!");
-                return;
-            }
+            // const token = await getToken();
+            // if (!token) {
+            //     console.error("Token isn't available!");
+            //     return;
+            // }
 
             const formData = new FormData();
             Object.entries(values).forEach(([key, value]) => {
