@@ -4,6 +4,7 @@ import loginSlice from "./reducers/login/loginSlice";
 import blogsSlice from "./reducers/blogs/blogsSlice";
 import addBlogSlice from "./reducers/add-blog/addBlogSlice";
 import categoriesSlice from "./reducers/categories/categoriesSlice";
+import currentBlogSlice from "./reducers/current-blog/currentBlogSlice";
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     getBlogs: blogsSlice,
     addBlog: addBlogSlice,
     getCategories: categoriesSlice,
+    getCurrentBlog: currentBlogSlice,
   },
 });
 

@@ -8,13 +8,14 @@ export interface ICategories {
 
 // fetch blog by id
 export interface IBlogProps {
-  id: number;
+  id: number | null;
   title: string;
   description: string;
   image: string;
   publish_date: string;
   categories: ICategories[];
   author: string;
+  email: string;
 }
 
 // blog post

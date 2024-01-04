@@ -25,9 +25,9 @@
         gap: var(--space-under-md);
 
         &_card {
+            width: 400px;
             background-color: inherit;
             box-shadow: none !important;
-            width: 400px;
 
             &_image {
                 border-radius: var(--space-under-md) !important;

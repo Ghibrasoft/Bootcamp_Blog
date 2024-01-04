@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { IErrorResponse } from "../../../types/blogType";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const loginUser = createAsyncThunk<
   any,

@@ -40,7 +40,7 @@ export default function AddBlog() {
     // select
     const tagRender = (props: CustomTagProps) => {
         const { value, closable, onClose } = props;
-        const category = categories.find((cat) => cat.id === Number(value));
+        const category = categories.data.find((opt) => opt.id === Number(value));
 
         if (category) {
             const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
@@ -136,11 +136,6 @@ export default function AddBlog() {
     const onFinish = async (values: IFormDataProps) => {
         // console.log(values)
         try {
-            // const token = await getToken();
-            // if (!token) {
-            //     console.error("Token isn't available!");
-            //     return;
-            // }
 
             const formData = new FormData();
             Object.entries(values).forEach(([key, value]) => {
@@ -329,7 +324,7 @@ export default function AddBlog() {
                                         mode="multiple"
                                         placeholder="აიჩიეთ კატეგორია"
                                         tagRender={tagRender}
-                                        options={categories.map((opt) => ({
+                                        options={categories.data.map((opt) => ({
                                             label:
                                                 <div style={{
                                                     color: opt.text_color,

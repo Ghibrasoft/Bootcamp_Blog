@@ -60,7 +60,7 @@ export default function Home() {
             </div>
 
             <div className={HomeStyles.home_section_bottom}>
-                {blogsData.map(({ id, title, description, author, categories, publish_date, image }) => (
+                {blogsData.data.map(({ id, title, description, author, categories, publish_date, image }) => (
                     <Card
                         className={HomeStyles.home_section_bottom_card}
                         key={id}

@@ -1,6 +1,6 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { IBlogProps, IErrorResponse } from "../../../types/blogType";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const fetchBlogData = createAsyncThunk<
   any,
