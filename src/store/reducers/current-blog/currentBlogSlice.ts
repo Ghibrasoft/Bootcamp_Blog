@@ -30,13 +30,13 @@ export const getCurrentBlog = createAsyncThunk<
   }
 });
 
-interface initialStateProps {
+interface InitialStateProps {
   currentBlog: IBlogProps;
   loading: boolean;
   error: IErrorResponse | null;
 }
 
-const initialState: initialStateProps = {
+const initialState: InitialStateProps = {
   currentBlog: {
     id: null,
     title: "",

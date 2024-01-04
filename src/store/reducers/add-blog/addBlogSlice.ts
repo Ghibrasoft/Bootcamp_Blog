@@ -30,11 +30,11 @@ export const addBlog = createAsyncThunk<
   }
 });
 
-interface IBlogState {
+interface InitialStateProps {
   loading: boolean;
   error: IErrorResponse | null;
 }
-const initialState: IBlogState = {
+const initialState: InitialStateProps = {
   loading: false,
   error: null,
 };

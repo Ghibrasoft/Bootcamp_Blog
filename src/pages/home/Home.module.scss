@@ -19,12 +19,13 @@
     }
 
     &_filterList {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-l);
 
         @media screen and (max-width: 900px) {
-            ul {
-                flex-wrap: wrap;
-                gap: var(--space-md);
-            }
+            flex-wrap: wrap;
         }
     }
 

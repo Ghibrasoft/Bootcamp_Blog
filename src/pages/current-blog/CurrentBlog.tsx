@@ -1,22 +1,25 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { Carousel, CarouselProps, Empty } from "antd";
 import { useAppDispatch } from "../../store/store";
+import { blogs } from "../../store/selectors/blogs";
 import { token } from "../../utils/constants/token";
 import CurrentBlogStyles from "./CurrentBlog.module.scss";
+import { Button, Carousel, CarouselProps, Empty } from "antd";
 import { currentBlog } from "../../store/selectors/currentBlog";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import { getBlogs } from "../../store/reducers/blogs/blogsSlice";
+import { useWindowWidth } from "../../utils/hooks/useWindowWidth";
 import BlogCard from "../../components/dynamic-blog-card/BlogCard";
 import { getCurrentBlog } from "../../store/reducers/current-blog/currentBlogSlice";
-import { getBlogs } from "../../store/reducers/blogs/blogsSlice";
-import { blogs } from "../../store/selectors/blogs";
 
 
-const customNextArrow = <>next</>
-const customPrevArrow = <>prev</>
+
 export default function CurrentBlog() {
     const { id } = useParams();
     const dispatch = useAppDispatch();
+    const windowWidth = useWindowWidth();
+    const SLIDES_TO_SHOW = windowWidth <= 900 ? 1 : windowWidth <= 1280 ? 2 : 3
     const blogsData = useSelector(blogs);
     const currentBlogData = useSelector(currentBlog);
     const similarBlogs = blogsData.data.filter((blog) =>
@@ -27,21 +30,47 @@ export default function CurrentBlog() {
         )
     );
 
+    const CustomPrevArrow: React.FC<any> = (props) => {
+        return (
+            <Button
+                className={CurrentBlogStyles.currentBlog_section_sliderContent_arrowWrapper}
+                size="large"
+                type="primary"
+                shape="circle"
+                onClick={props.onClick}
+                icon={<LeftOutlined />}
+                disabled={props.currentSlide === 0}
+            />
+        );
+    };
+    const CustomNextArrow: React.FC<any> = (props) => {
+        return (
+            <Button
+                className={CurrentBlogStyles.currentBlog_section_sliderContent_arrowWrapper}
+                size="large"
+                type="primary"
+                shape="circle"
+                onClick={props.onClick}
+                icon={<RightOutlined />}
+                disabled={props.currentSlide === props.slideCount - SLIDES_TO_SHOW}
+            />
+        );
+    };
     const settings: CarouselProps = {
         speed: 500,
         dots: false,
         arrows: true,
-        infinite: true,
         autoplay: true,
+        infinite: false,
         draggable: true,
-        slidesToShow: 3,
+        slidesToShow: SLIDES_TO_SHOW,
         slidesToScroll: 1,
         cssEase: "linear",
         autoplaySpeed: 3000,
         pauseOnHover: true,
         adaptiveHeight: true,
-        prevArrow: customPrevArrow,
-        nextArrow: customNextArrow,
+        prevArrow: <CustomPrevArrow />,
+        nextArrow: <CustomNextArrow />,
     }
 
     useEffect(() => {

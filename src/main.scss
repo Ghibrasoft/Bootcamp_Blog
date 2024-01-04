@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed&display=swap');
 @import './variables';
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed&display=swap');
 
 
 * {
@@ -41,19 +41,4 @@
 ::-webkit-selection {
     background-color: var(--color-primary);
     color: var(--color-neutral-1);
-}
-
-.category-list {
-    display: flex;
-    align-items: center;
-    gap: var(--space-l);
-    list-style-type: none;
-    justify-content: center;
-
-    li {
-
-        button {
-            box-shadow: none;
-        }
-    }
 }

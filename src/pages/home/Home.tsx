@@ -1,7 +1,7 @@
 import blogImg from "/blog.svg";
-import { useEffect, useState } from "react";
 import { Button, Image } from "antd";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import HomeStyles from "./Home.module.scss";
 import { useAppDispatch } from "../../store/store";
 import { token } from "../../utils/constants/token";
@@ -16,12 +16,14 @@ export default function Home() {
     const dispatch = useAppDispatch();
     const blogsData = useSelector(blogs);
     const [checkedTitles, setCheckedTitles] = useState<string[]>([]);
+    const currentDate = new Date();
     const filteredBlogs = blogsData.data.filter((blog) =>
         blog.categories.some((category) =>
             checkedTitles.some(
                 (categoryTitle) => categoryTitle === category.title
             )
-        )
+        ) &&
+        new Date(blog.publish_date) <= currentDate
     );
 
     const handleFilterClick = (title: string) => {
@@ -41,7 +43,6 @@ export default function Home() {
         fetchBlogs();
     }, []);
 
-
     return (
         <section className={HomeStyles.home_section}>
             <div className={HomeStyles.home_section_top}>
@@ -56,33 +57,35 @@ export default function Home() {
             </div>
 
             <div className={HomeStyles.home_section_filterList}>
-                <ul className="category-list">
-                    {FILTER_LIST.map(({ title, color, bgColor }, index) => (
-                        <li key={index}>
-                            <Button
-                                size="large"
-                                shape="round"
-                                type="primary"
-                                htmlType="button"
-                                style={{
-                                    color: color,
-                                    background: bgColor,
-                                    border: checkedTitles.includes(title) ? '1px solid var(--color-neutral-13)' : ''
-                                }}
-                                onClick={() => handleFilterClick(title)}
-                            >
-                                {title}
-                            </Button>
-                        </li>
-                    ))}
-                </ul>
+                {FILTER_LIST.map(({ title, color, bgColor }, index) => (
+                    <Button
+                        key={index}
+                        size="large"
+                        shape="round"
+                        type="primary"
+                        htmlType="button"
+                        style={{
+                            color: color,
+                            background: bgColor,
+                            border: checkedTitles.includes(title) ? '1px solid var(--color-neutral-13)' : ''
+                        }}
+                        onClick={() => handleFilterClick(title)}
+                    >
+                        {title}
+                    </Button>
+                ))}
             </div>
 
             <div className={HomeStyles.home_section_bottom}>
                 <BlogCard
                     type="small"
                     width={'400px'}
-                    blogDataArray={filteredBlogs.length === 0 ? blogsData.data : filteredBlogs}
+                    blogDataArray={
+                        filteredBlogs.length === 0 ?
+                            blogsData.data.filter((blog) => new Date(blog.publish_date) <= currentDate)
+                            :
+                            filteredBlogs
+                    }
                 />
             </div>
         </section>

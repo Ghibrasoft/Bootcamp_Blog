@@ -26,13 +26,13 @@ export const loginUser = createAsyncThunk<
   }
 });
 
-interface ILoginStateType {
+interface InitialStateProps {
   isLogged: boolean;
   loading: boolean;
   error: IErrorResponse | null;
 }
 
-const initialState: ILoginStateType = {
+const initialState: InitialStateProps = {
   isLogged: false,
   loading: false,
   error: null,

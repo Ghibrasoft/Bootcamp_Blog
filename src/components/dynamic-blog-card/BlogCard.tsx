@@ -1,9 +1,9 @@
 import { Card, Image } from "antd";
-import BlogCardStyles from "./BlogCard.module.scss";
-import { formatDate } from "../../utils/helpers/date";
-import { IBlogCard } from "../../types/blogType";
 import { Link } from "react-router-dom";
+import { IBlogCard } from "../../types/blogType";
+import BlogCardStyles from "./BlogCard.module.scss";
 import { ArrowUpOutlined } from "@ant-design/icons";
+import { formatDate } from "../../utils/helpers/date";
 
 const { Meta } = Card;
 
@@ -44,20 +44,20 @@ const BlogCard: React.FC<IBlogCard> = ({ type, width, blogData, blogDataArray = 
                         />
                         <div className={BlogCardStyles.wrapper_card_content}>
                             <h1 style={{ fontSize: type === 'small' ? '1rem' : '' }}>{title}</h1>
-                            <ul className="category-list">
+                            <div className={BlogCardStyles.wrapper_card_content_categoryList}>
                                 {categories?.map(({ id, title, text_color, background_color }) => (
-                                    <li key={id}>
-                                        <div
-                                            style={{
-                                                color: text_color,
-                                                background: background_color,
-                                            }}
-                                        >
-                                            {title}
-                                        </div>
-                                    </li>
+                                    <div
+                                        className={BlogCardStyles.wrapper_card_content_categoryList_item}
+                                        key={id}
+                                        style={{
+                                            color: text_color,
+                                            background: background_color,
+                                        }}
+                                    >
+                                        {title}
+                                    </div>
                                 ))}
-                            </ul>
+                            </div>
                             <p
                                 className={BlogCardStyles.wrapper_card_content_desc}
                                 data-short-desc={type === 'small' ? true : false}
@@ -100,15 +100,17 @@ const BlogCard: React.FC<IBlogCard> = ({ type, width, blogData, blogDataArray = 
                             />
                             <div className={BlogCardStyles.wrapper_card_content}>
                                 <h1>{title}</h1>
-                                <ul className="category-list">
+                                <div className={BlogCardStyles.wrapper_card_content_categoryList}>
                                     {categories.map(({ id, title, text_color, background_color }) => (
-                                        <li key={id}>
-                                            <div style={{ background: background_color, color: text_color }}>
-                                                {title}
-                                            </div>
-                                        </li>
+                                        <div
+                                            className={BlogCardStyles.wrapper_card_content_categoryList_item}
+                                            key={id}
+                                            style={{ background: background_color, color: text_color }}
+                                        >
+                                            {title}
+                                        </div>
                                     ))}
-                                </ul>
+                                </div>
                                 <p
                                     className={BlogCardStyles.wrapper_card_content_desc}
                                     data-short-desc={type === 'small' ? true : false}

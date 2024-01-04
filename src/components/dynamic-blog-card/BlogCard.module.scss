@@ -31,15 +31,19 @@
             gap: var(--space-md);
             margin: var(--space-md) auto;
 
-            ul {
+            &_categoryList {
+                display: flex;
+                align-items: center;
                 justify-content: start;
                 gap: var(--space-md);
 
-                li {
-                    div {
-                        border-radius: 30px;
-                        padding: var(--space-xs) var(--space-under-md);
-                    }
+                &_item {
+                    border-radius: 30px;
+                    padding: var(--space-xs) var(--space-under-md);
+                }
+
+                @media screen and (max-width: 900px) {
+                    flex-wrap: wrap;
                 }
             }
 

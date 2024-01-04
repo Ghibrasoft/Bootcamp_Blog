@@ -22,12 +22,12 @@ export const getBlogs = createAsyncThunk<
   }
 });
 
-interface IBlogState {
+interface InitialStateProps {
   data: IBlogProps[];
   loading: boolean;
   error: IErrorResponse | null;
 }
-const initialState: IBlogState = {
+const initialState: InitialStateProps = {
   data: [],
   loading: false,
   error: null,

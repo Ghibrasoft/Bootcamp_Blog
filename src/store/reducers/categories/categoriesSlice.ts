@@ -25,13 +25,13 @@ export const fetchCategories = createAsyncThunk<
   }
 });
 
-interface ICategoriesState {
+interface InitialStateProps {
   data: ICategories[];
   loading: boolean;
   error: IErrorResponse | null;
 }
 
-const initialState: ICategoriesState = {
+const initialState: InitialStateProps = {
   data: [],
   loading: false,
   error: null,
