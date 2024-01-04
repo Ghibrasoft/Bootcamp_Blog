@@ -33,7 +33,12 @@ export default function CurrentBlog() {
     const CustomPrevArrow: React.FC<any> = (props) => {
         return (
             <Button
-                className={CurrentBlogStyles.currentBlog_section_sliderContent_arrowWrapper}
+                className={CurrentBlogStyles.currentBlog_section_sliderContent_arrow}
+                style={{
+                    position: 'absolute',
+                    top: '-45px',
+                    right: '100px',
+                }}
                 size="large"
                 type="primary"
                 shape="circle"
@@ -46,7 +51,12 @@ export default function CurrentBlog() {
     const CustomNextArrow: React.FC<any> = (props) => {
         return (
             <Button
-                className={CurrentBlogStyles.currentBlog_section_sliderContent_arrowWrapper}
+                className={CurrentBlogStyles.currentBlog_section_sliderContent_arrow}
+                style={{
+                    position: 'absolute',
+                    top: '-45px',
+                    right: '45px',
+                }}
                 size="large"
                 type="primary"
                 shape="circle"

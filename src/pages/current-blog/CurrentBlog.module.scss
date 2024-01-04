@@ -4,20 +4,22 @@
     }
 
     &_sliderContent {
-
         &_title {
             font-size: var(--font-size-xl);
+
+            @media screen and (max-width: 520px) {
+                font-size: var(--font-size-l);
+            }
         }
 
-        &_arrowWrapper {
+        &_arrow {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
         }
 
-        &_carousel {}
+        &_carousel {
+            position: relative;
+        }
     }
 }
