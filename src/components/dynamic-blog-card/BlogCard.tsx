@@ -8,7 +8,7 @@ import { ArrowUpOutlined } from "@ant-design/icons";
 const { Meta } = Card;
 
 
-const BlogCard: React.FC<IBlogCard> = ({ blogData, blogDataArray = [], width }) => {
+const BlogCard: React.FC<IBlogCard> = ({ type, width, blogData, blogDataArray = [] }) => {
     const { author, categories, description, email, image, publish_date, title } = blogData || {};
 
     return (
@@ -43,17 +43,25 @@ const BlogCard: React.FC<IBlogCard> = ({ blogData, blogDataArray = [], width }) 
                             }
                         />
                         <div className={BlogCardStyles.wrapper_card_content}>
-                            <h1>{title}</h1>
+                            <h1 style={{ fontSize: type === 'small' ? '1rem' : '' }}>{title}</h1>
                             <ul className="category-list">
                                 {categories?.map(({ id, title, text_color, background_color }) => (
                                     <li key={id}>
-                                        <div style={{ background: background_color, color: text_color }}>
+                                        <div
+                                            style={{
+                                                color: text_color,
+                                                background: background_color,
+                                            }}
+                                        >
                                             {title}
                                         </div>
                                     </li>
                                 ))}
                             </ul>
-                            <p className={BlogCardStyles.wrapper_card_content_desc}>
+                            <p
+                                className={BlogCardStyles.wrapper_card_content_desc}
+                                data-short-desc={type === 'small' ? true : false}
+                            >
                                 {description}
                             </p>
                         </div>
@@ -103,7 +111,7 @@ const BlogCard: React.FC<IBlogCard> = ({ blogData, blogDataArray = [], width }) 
                                 </ul>
                                 <p
                                     className={BlogCardStyles.wrapper_card_content_desc}
-                                    data-short-desc={true}
+                                    data-short-desc={type === 'small' ? true : false}
                                 >
                                     {description}
                                 </p>

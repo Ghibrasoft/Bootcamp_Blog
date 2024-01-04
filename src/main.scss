@@ -44,11 +44,11 @@
 }
 
 .category-list {
-    list-style-type: none;
     display: flex;
     align-items: center;
+    gap: var(--space-l);
+    list-style-type: none;
     justify-content: center;
-    gap: 24px;
 
     li {
 

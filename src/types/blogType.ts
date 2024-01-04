@@ -39,7 +39,8 @@ export interface IErrorResponse {
 
 // dynamic blog card
 export interface IBlogCard {
+  type: "small" | "large";
+  width: string;
   blogData?: IBlogProps;
   blogDataArray?: IBlogProps[];
-  width: string | number;
 }

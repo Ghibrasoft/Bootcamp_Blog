@@ -196,42 +196,41 @@ export default function AddBlog() {
                             onFinish={onFinish}
                         >
                             {/* upload photo */}
-                            <Form.Item label="ატვირთეთ ფოტო">
-                                <Form.Item
+                            <Form.Item
+                                label={<span className={AddBlogStyles.addblog_section_content_formWrapper_form_imgLabel}>ატვირთეთ ფოტო</span>}
+                                name="image"
+                                valuePropName="image"
+                                wrapperCol={{ span: 23 }}
+                                getValueFromEvent={normFile}
+                                rules={[
+                                    { required: true, message: '' }
+                                ]}
+                            >
+                                <Upload.Dragger
                                     name="image"
-                                    valuePropName="image"
-                                    wrapperCol={{ span: 23 }}
-                                    getValueFromEvent={normFile}
-                                    rules={[
-                                        { required: true, message: '' }
-                                    ]}
+                                    listType="picture"
+                                    accept=".png, .jpeg, .jpg"
+                                    beforeUpload={() => {
+                                        return false;
+                                    }}
+                                // multiple
                                 >
-                                    <Upload.Dragger
-                                        name="image"
-                                        listType="picture"
-                                        accept=".png, .jpeg, .jpg"
-                                        beforeUpload={() => {
-                                            return false;
-                                        }}
-                                    // multiple
-                                    >
-                                        <Image
-                                            preview={false}
-                                            src={uploadIcon}
-                                            alt="upload-icon"
-                                        />
-                                        <div>
-                                            <span>ჩააგდეთ ფაილი აქ ან</span>
-                                            <Button
-                                                size="small"
-                                                type="link"
-                                                htmlType="button"
-                                            >
-                                                აირჩიეთ ფაილი
-                                            </Button>
-                                        </div>
-                                    </Upload.Dragger>
-                                </Form.Item>
+                                    <Image
+                                        preview={false}
+                                        src={uploadIcon}
+                                        alt="upload-icon"
+                                    />
+                                    <div>
+                                        <span>ჩააგდეთ ფაილი აქ ან</span>
+                                        <Button
+                                            size="small"
+                                            type="link"
+                                            htmlType="button"
+                                        >
+                                            აირჩიეთ ფაილი
+                                        </Button>
+                                    </div>
+                                </Upload.Dragger>
                             </Form.Item>
 
                             {/* group */}
@@ -344,7 +343,7 @@ export default function AddBlog() {
                             {/* email */}
                             <Form.Item
                                 name="email"
-                                label="ელ-ფოსტა"
+                                label={<span className={AddBlogStyles.addblog_section_content_formWrapper_form_group_emailLabel}>ელ-ფოსტა</span>}
                                 validateTrigger="onBlur"
                                 wrapperCol={{ span: 11 }}
                                 rules={[
