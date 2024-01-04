@@ -1,15 +1,13 @@
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { Card, Carousel, CarouselProps, Image } from "antd";
+import { Carousel, CarouselProps } from "antd";
+import { useAppDispatch } from "../../store/store";
+import { token } from "../../utils/constants/token";
 import CurrentBlogStyles from "./CurrentBlog.module.scss";
 import { currentBlog } from "../../store/selectors/currentBlog";
-import { useAppDispatch } from "../../store/store";
-import { useEffect } from "react";
+import BlogCard from "../../components/dynamic-blog-card/BlogCard";
 import { getCurrentBlog } from "../../store/reducers/current-blog/currentBlogSlice";
-import { token } from "../../utils/constants/token";
-import { formatDate } from "../../utils/helpers/date";
-
-const { Meta } = Card;
 
 
 const customNextArrow = <>next</>
@@ -18,7 +16,6 @@ export default function CurrentBlog() {
     const { id } = useParams();
     const dispatch = useAppDispatch();
     const currentBlogData = useSelector(currentBlog);
-    const { title, description, image, publish_date, categories, author, email } = currentBlogData.currentBlog;
 
     const settings: CarouselProps = {
         infinite: true,
@@ -51,47 +48,10 @@ export default function CurrentBlog() {
         <section className={CurrentBlogStyles.currentBlog_section}>
             {/* current blog */}
             <div className={CurrentBlogStyles.currentBlog_section_blog}>
-                <Card
-                    className={CurrentBlogStyles.currentBlog_section_blog_card}
-                    key={id}
-                    bordered={false}
-                    cover={
-                        <Image
-                            className={CurrentBlogStyles.currentBlog_section_blog_card_image}
-                            alt="blog-image"
-                            src={image}
-                            height={250}
-                        />}
-                >
-                    <Meta
-                        className={CurrentBlogStyles.currentBlog_section_blog_card_meta}
-                        title={
-                            <div className={CurrentBlogStyles.currentBlog_section_blog_card_meta_title}>
-                                <p>
-                                    {author}
-                                </p>
-                                <span>
-                                    {formatDate(publish_date)} &bull; {email}
-                                </span>
-                            </div>
-                        }
-                    />
-                    <div className={CurrentBlogStyles.currentBlog_section_blog_card_content}>
-                        <h1>{title}</h1>
-                        <ul className="category-list">
-                            {categories.map(({ id, title, text_color, background_color }) => (
-                                <li key={id}>
-                                    <div style={{ background: background_color, color: text_color }}>
-                                        {title}
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
-                        <p className={CurrentBlogStyles.currentBlog_section_blog_card_content_desc}>
-                            {description}
-                        </p>
-                    </div>
-                </Card>
+                <BlogCard
+                    blogData={currentBlogData.currentBlog}
+                    width={'700px'}
+                />
             </div>
 
             {/* similar blogs */}

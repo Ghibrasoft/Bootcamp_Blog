@@ -1,8 +1,5 @@
 .currentBlog_section {
     &_blog {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
         margin: var(--space-xl) auto;
 
         &_card {

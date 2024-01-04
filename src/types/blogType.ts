@@ -36,3 +36,10 @@ export interface IErrorResponse {
     [key: string]: string[];
   };
 }
+
+// dynamic blog card
+export interface IBlogCard {
+  blogData?: IBlogProps;
+  blogDataArray?: IBlogProps[];
+  width: string | number;
+}
