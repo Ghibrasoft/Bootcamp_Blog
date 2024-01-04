@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { IErrorResponse } from "../../../types/blogType";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const addBlog = createAsyncThunk<
   void,
@@ -30,11 +30,11 @@ export const addBlog = createAsyncThunk<
   }
 });
 
-interface IBlogState {
+interface InitialStateProps {
   loading: boolean;
   error: IErrorResponse | null;
 }
-const initialState: IBlogState = {
+const initialState: InitialStateProps = {
   loading: false,
   error: null,
 };

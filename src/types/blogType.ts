@@ -8,7 +8,7 @@ export interface ICategories {
 
 // fetch blog by id
 export interface IBlogProps {
-  id: number;
+  id: number | null;
   title: string;
   description: string;
   image: string;
@@ -35,4 +35,12 @@ export interface IErrorResponse {
   errors: {
     [key: string]: string[];
   };
+}
+
+// dynamic blog card
+export interface IBlogCard {
+  type: "small" | "large";
+  width: string;
+  blogData?: IBlogProps;
+  blogDataArray?: IBlogProps[];
 }

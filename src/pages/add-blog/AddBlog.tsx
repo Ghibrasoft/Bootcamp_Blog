@@ -5,9 +5,9 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import AddBlogStyles from "./AddBlog.module.scss";
 import { useAppDispatch } from "../../store/store";
+import { token } from "../../utils/constants/token";
 import { InfoCircleFilled } from "@ant-design/icons";
 import { IFormDataProps } from "../../types/blogType";
-import { getToken } from "../../utils/helpers/getToken";
 import { isGeorgian } from "../../utils/helpers/isGeorgian";
 import { addBlogData } from "../../store/selectors/addBlog";
 import type { CustomTagProps } from 'rc-select/lib/BaseSelect';
@@ -40,7 +40,7 @@ export default function AddBlog() {
     // select
     const tagRender = (props: CustomTagProps) => {
         const { value, closable, onClose } = props;
-        const category = categories.find((cat) => cat.id === Number(value));
+        const category = categories.data.find((opt) => opt.id === Number(value));
 
         if (category) {
             const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
@@ -136,11 +136,6 @@ export default function AddBlog() {
     const onFinish = async (values: IFormDataProps) => {
         // console.log(values)
         try {
-            const token = await getToken();
-            if (!token) {
-                console.error("Token isn't available!");
-                return;
-            }
 
             const formData = new FormData();
             Object.entries(values).forEach(([key, value]) => {
@@ -201,42 +196,41 @@ export default function AddBlog() {
                             onFinish={onFinish}
                         >
                             {/* upload photo */}
-                            <Form.Item label="ატვირთეთ ფოტო">
-                                <Form.Item
+                            <Form.Item
+                                label={<span className={AddBlogStyles.addblog_section_content_formWrapper_form_imgLabel}>ატვირთეთ ფოტო</span>}
+                                name="image"
+                                valuePropName="image"
+                                wrapperCol={{ span: 23 }}
+                                getValueFromEvent={normFile}
+                                rules={[
+                                    { required: true, message: '' }
+                                ]}
+                            >
+                                <Upload.Dragger
                                     name="image"
-                                    valuePropName="image"
-                                    wrapperCol={{ span: 23 }}
-                                    getValueFromEvent={normFile}
-                                    rules={[
-                                        { required: true, message: '' }
-                                    ]}
+                                    listType="picture"
+                                    accept=".png, .jpeg, .jpg"
+                                    beforeUpload={() => {
+                                        return false;
+                                    }}
+                                // multiple
                                 >
-                                    <Upload.Dragger
-                                        name="image"
-                                        listType="picture"
-                                        accept=".png, .jpeg, .jpg"
-                                        beforeUpload={() => {
-                                            return false;
-                                        }}
-                                    // multiple
-                                    >
-                                        <Image
-                                            preview={false}
-                                            src={uploadIcon}
-                                            alt="upload-icon"
-                                        />
-                                        <div>
-                                            <span>ჩააგდეთ ფაილი აქ ან</span>
-                                            <Button
-                                                size="small"
-                                                type="link"
-                                                htmlType="button"
-                                            >
-                                                აირჩიეთ ფაილი
-                                            </Button>
-                                        </div>
-                                    </Upload.Dragger>
-                                </Form.Item>
+                                    <Image
+                                        preview={false}
+                                        src={uploadIcon}
+                                        alt="upload-icon"
+                                    />
+                                    <div>
+                                        <span>ჩააგდეთ ფაილი აქ ან</span>
+                                        <Button
+                                            size="small"
+                                            type="link"
+                                            htmlType="button"
+                                        >
+                                            აირჩიეთ ფაილი
+                                        </Button>
+                                    </div>
+                                </Upload.Dragger>
                             </Form.Item>
 
                             {/* group */}
@@ -329,7 +323,7 @@ export default function AddBlog() {
                                         mode="multiple"
                                         placeholder="აიჩიეთ კატეგორია"
                                         tagRender={tagRender}
-                                        options={categories.map((opt) => ({
+                                        options={categories.data.map((opt) => ({
                                             label:
                                                 <div style={{
                                                     color: opt.text_color,
@@ -349,7 +343,7 @@ export default function AddBlog() {
                             {/* email */}
                             <Form.Item
                                 name="email"
-                                label="ელ-ფოსტა"
+                                label={<span className={AddBlogStyles.addblog_section_content_formWrapper_form_group_emailLabel}>ელ-ფოსტა</span>}
                                 validateTrigger="onBlur"
                                 wrapperCol={{ span: 11 }}
                                 rules={[

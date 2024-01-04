@@ -1,0 +1,25 @@
+.currentBlog_section {
+    &_blog {
+        margin: var(--space-xl) auto;
+    }
+
+    &_sliderContent {
+        &_title {
+            font-size: var(--font-size-xl);
+
+            @media screen and (max-width: 520px) {
+                font-size: var(--font-size-l);
+            }
+        }
+
+        &_arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        &_carousel {
+            position: relative;
+        }
+    }
+}

@@ -1,6 +1,6 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { ICategories, IErrorResponse } from "../../../types/blogType";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const fetchCategories = createAsyncThunk<
   ICategories[],
@@ -25,13 +25,13 @@ export const fetchCategories = createAsyncThunk<
   }
 });
 
-interface ICategoriesState {
+interface InitialStateProps {
   data: ICategories[];
   loading: boolean;
   error: IErrorResponse | null;
 }
 
-const initialState: ICategoriesState = {
+const initialState: InitialStateProps = {
   data: [],
   loading: false,
   error: null,

@@ -1,16 +1,20 @@
 import axios from "axios";
-import { IErrorResponse } from "../../../types/blogType";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { IBlogProps, IErrorResponse } from "../../../types/blogType";
 
-export const loginUser = createAsyncThunk<
-  any,
-  string,
+export const getCurrentBlog = createAsyncThunk<
+  IBlogProps,
+  { blogId: string; token: string },
   { rejectValue: IErrorResponse }
->("login/loginUser", async (userEmail, { rejectWithValue }) => {
+>("blogs/currentBlog", async ({ blogId, token }, { rejectWithValue }) => {
   try {
-    const res = await axios.post(
-      "https://api.blog.redberryinternship.ge/api/login",
-      userEmail
+    const res = await axios.get(
+      `https://api.blog.redberryinternship.ge/api/blogs/${blogId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     return res.data;
   } catch (error) {
@@ -27,30 +31,39 @@ export const loginUser = createAsyncThunk<
 });
 
 interface InitialStateProps {
-  isLogged: boolean;
+  currentBlog: IBlogProps;
   loading: boolean;
   error: IErrorResponse | null;
 }
 
 const initialState: InitialStateProps = {
-  isLogged: false,
+  currentBlog: {
+    id: null,
+    title: "",
+    description: "",
+    image: "",
+    publish_date: "",
+    categories: [],
+    author: "",
+    email: "",
+  },
   loading: false,
   error: null,
 };
-const loginSlice = createSlice({
-  name: "login",
+const currentBlogSlice = createSlice({
+  name: "blogs/currentBlog",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(loginUser.pending, (state) => {
+      .addCase(getCurrentBlog.pending, (state) => {
         state.loading = true;
       })
-      .addCase(loginUser.fulfilled, (state) => {
-        state.isLogged = true;
+      .addCase(getCurrentBlog.fulfilled, (state, action) => {
         state.loading = false;
+        state.currentBlog = action.payload;
       })
-      .addCase(loginUser.rejected, (state, action) => {
+      .addCase(getCurrentBlog.rejected, (state, action) => {
         state.loading = false;
         if (action.payload) {
           state.error = action.payload;
@@ -61,5 +74,5 @@ const loginSlice = createSlice({
   },
 });
 
-export const {} = loginSlice.actions;
-export default loginSlice.reducer;
+export const {} = currentBlogSlice.actions;
+export default currentBlogSlice.reducer;

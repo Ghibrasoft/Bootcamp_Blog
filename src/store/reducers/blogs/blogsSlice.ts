@@ -1,12 +1,12 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { IErrorResponse } from "../../../types/blogType";
+import { IBlogProps, IErrorResponse } from "../../../types/blogType";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-export const fetchBlogData = createAsyncThunk<
+export const getBlogs = createAsyncThunk<
   any,
   string | null,
   { rejectValue: IErrorResponse }
->("blogs", async (token, { rejectWithValue }) => {
+>("blogs/getBlogs", async (token, { rejectWithValue }) => {
   try {
     const res = await axios.get(
       "https://api.blog.redberryinternship.ge/api/blogs",
@@ -22,25 +22,31 @@ export const fetchBlogData = createAsyncThunk<
   }
 });
 
+interface InitialStateProps {
+  data: IBlogProps[];
+  loading: boolean;
+  error: IErrorResponse | null;
+}
+const initialState: InitialStateProps = {
+  data: [],
+  loading: false,
+  error: null,
+};
 const blogSlice = createSlice({
-  name: "blog",
-  initialState: {
-    data: [],
-    loading: false,
-    error: null,
-  },
+  name: "blog/getBlogs",
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchBlogData.pending, (state) => {
+      .addCase(getBlogs.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchBlogData.fulfilled, (state, action) => {
+      .addCase(getBlogs.fulfilled, (state, action: PayloadAction<any>) => {
         state.loading = false;
         state.data = action.payload;
       })
-      .addCase(fetchBlogData.rejected, (state, action) => {
+      .addCase(getBlogs.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as any;
       });

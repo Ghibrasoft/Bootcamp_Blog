@@ -1,12 +1,11 @@
 .home_section {
-
     &_top {
         display: flex;
         align-items: center;
         justify-content: space-between;
 
         h1 {
-            font-size: 64px;
+            font-size: var(--font-size-xxl);
             font-weight: 700;
             line-height: 72px;
             font-style: normal;
@@ -20,19 +19,28 @@
     }
 
     &_filterList {
-        ul {
-            list-style-type: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-l);
 
-            li {
+        @media screen and (max-width: 900px) {
+            flex-wrap: wrap;
+        }
+    }
 
-                button {
-                    box-shadow: none;
-                }
-            }
+    &_bottom {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        margin: var(--space-xxl) auto;
+        gap: var(--space-under-md);
+
+        @media screen and (max-width: 1280px) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @media screen and (max-width: 900px) {
+            grid-template-columns: 1fr;
         }
     }
 }
