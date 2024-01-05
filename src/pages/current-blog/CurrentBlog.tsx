@@ -91,7 +91,7 @@ export default function CurrentBlog() {
         }
 
         fetchCurrentBlog();
-    }, []);
+    }, [id]);
 
     return (
         <section className={CurrentBlogStyles.currentBlog_section}>

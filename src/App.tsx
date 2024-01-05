@@ -13,8 +13,8 @@ const { Header, Content } = Layout;
 
 
 function App() {
-  const userData = useSelector((state: RootState) => state.login);
   const navigate = useNavigate();
+  const userData = useSelector((state: RootState) => state.login);
 
   useEffect(() => {
     if (!userData.isLogged) {
