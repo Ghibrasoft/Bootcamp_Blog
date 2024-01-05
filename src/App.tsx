@@ -1,26 +1,26 @@
 import { Layout } from "antd"
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import Home from "./pages/home/Home";
-import { useSelector } from "react-redux";
-import { RootState } from "./store/store";
+// import { useSelector } from "react-redux";
+// import { RootState } from "./store/store";
 import AddBlog from "./pages/add-blog/AddBlog";
 import NavBar from "./components/navbar/NavBar";
 import LayoutStyles from "./layout/Layout.module.scss";
 import CurrentBlog from "./pages/current-blog/CurrentBlog";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 const { Header, Content } = Layout;
 
 
 function App() {
-  const navigate = useNavigate();
-  const userData = useSelector((state: RootState) => state.login);
+  // const navigate = useNavigate();
+  // const userData = useSelector((state: RootState) => state.login);
 
-  useEffect(() => {
-    if (!userData.isLogged) {
-      navigate("/");
-    }
-  }, [userData.isLogged]);
+  // useEffect(() => {
+  //   if (!userData.isLogged) {
+  //     navigate("/");
+  //   }
+  // }, [userData.isLogged]);
 
   return (
     <Layout className={LayoutStyles.layout}>

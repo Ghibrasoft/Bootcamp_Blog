@@ -1,5 +1,5 @@
 import blogImg from "/blog.svg";
-import { Button, Image } from "antd";
+import { Button, Image, Spin } from "antd";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import HomeStyles from "./Home.module.scss";
@@ -76,18 +76,20 @@ export default function Home() {
                 ))}
             </div>
 
-            <div className={HomeStyles.home_section_bottom}>
-                <BlogCard
-                    type="small"
-                    width={'400px'}
-                    blogDataArray={
-                        filteredBlogs.length === 0 ?
-                            blogsData.data.filter((blog) => new Date(blog.publish_date) <= currentDate)
-                            :
-                            filteredBlogs
-                    }
-                />
-            </div>
+            <Spin spinning={blogsData.loading}>
+                <div className={HomeStyles.home_section_bottom}>
+                    <BlogCard
+                        type="small"
+                        width={'400px'}
+                        blogDataArray={
+                            filteredBlogs.length === 0 ?
+                                blogsData.data.filter((blog) => new Date(blog.publish_date) <= currentDate)
+                                :
+                                filteredBlogs
+                        }
+                    />
+                </div>
+            </Spin>
         </section>
     )
 }

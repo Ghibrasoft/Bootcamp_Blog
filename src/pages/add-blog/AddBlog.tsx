@@ -157,6 +157,16 @@ export default function AddBlog() {
             console.error("Error in onFinish:", error);
         }
     };
+    useEffect(() => {
+        localStorage.setItem("formValues", JSON.stringify(form.getFieldsValue()));
+    }, [values]);
+    useEffect(() => {
+        const savedFormValues = localStorage.getItem("formValues");
+
+        if (savedFormValues) {
+            form.setFieldsValue(JSON.parse(savedFormValues));
+        }
+    }, []);
 
 
     return (
@@ -184,8 +194,8 @@ export default function AddBlog() {
                             }
                         }}>
                         <Form
-                            form={form}
                             className={AddBlogStyles.addblog_section_content_formWrapper_form}
+                            form={form}
                             name="add_blog"
                             layout="vertical"
                             onFinish={onFinish}
