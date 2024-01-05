@@ -1,6 +1,6 @@
 import { Card, Image } from "antd";
 import { Link, useParams } from "react-router-dom";
-import { IBlogCard } from "../../types/blogType";
+import { IBlogCard, ICategories } from "../../types/blogType";
 import BlogCardStyles from "./BlogCard.module.scss";
 import { ArrowUpOutlined } from "@ant-design/icons";
 import { formatDate } from "../../utils/helpers/date";
@@ -20,7 +20,23 @@ const BlogCard: React.FC<IBlogCard> = ({ type, width, blogData, blogDataArray = 
             bgColor: item.bgColor,
         };
     });
+    const renderCategoryItem = ({ id, title, text_color, background_color }: ICategories) => {
+        const filteredItem = filteredColors[id];
+        return (
+            <div
+                className={BlogCardStyles.wrapper_card_content_categoryList_item}
+                key={id}
+                style={{
+                    color: filteredItem ? filteredItem.color : text_color,
+                    background: filteredItem ? filteredItem.bgColor : background_color,
+                }}
+            >
+                {title}
+            </div>
+        );
+    };
 
+    console.log('card re-render')
     return (
         <>
             {blogData ? // if single
@@ -55,21 +71,7 @@ const BlogCard: React.FC<IBlogCard> = ({ type, width, blogData, blogDataArray = 
                         <div className={BlogCardStyles.wrapper_card_content}>
                             <h1 style={{ fontSize: type === 'small' ? '1rem' : '' }}>{title}</h1>
                             <div className={BlogCardStyles.wrapper_card_content_categoryList}>
-                                {categories?.map(({ id, title, text_color, background_color }) => {
-                                    const filteredItem = filteredColors[id];
-                                    return (
-                                        <div
-                                            className={BlogCardStyles.wrapper_card_content_categoryList_item}
-                                            key={id}
-                                            style={{
-                                                color: filteredItem ? filteredItem.color : text_color,
-                                                background: filteredItem ? filteredItem.bgColor : background_color,
-                                            }}
-                                        >
-                                            {title}
-                                        </div>
-                                    )
-                                })}
+                                {categories?.map(renderCategoryItem)}
                             </div>
                             <p
                                 className={BlogCardStyles.wrapper_card_content_desc}
@@ -123,21 +125,7 @@ const BlogCard: React.FC<IBlogCard> = ({ type, width, blogData, blogDataArray = 
                             <div className={BlogCardStyles.wrapper_card_content}>
                                 <h1>{title}</h1>
                                 <div className={BlogCardStyles.wrapper_card_content_categoryList}>
-                                    {categories?.map(({ id, title, text_color, background_color }) => {
-                                        const filteredItem = filteredColors[id];
-                                        return (
-                                            <div
-                                                className={BlogCardStyles.wrapper_card_content_categoryList_item}
-                                                key={id}
-                                                style={{
-                                                    color: filteredItem ? filteredItem.color : text_color,
-                                                    background: filteredItem ? filteredItem.bgColor : background_color,
-                                                }}
-                                            >
-                                                {title}
-                                            </div>
-                                        )
-                                    })}
+                                    {categories?.map(renderCategoryItem)}
                                 </div>
                                 <p
                                     className={BlogCardStyles.wrapper_card_content_desc}

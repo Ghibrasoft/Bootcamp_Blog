@@ -1,4 +1,6 @@
-export const FILTER_LIST = [
+import { IFilterListProps } from "../../../types/blogType";
+
+export const FILTER_LIST: IFilterListProps[] = [
   {
     id: 1,
     title: "მარკეტი",

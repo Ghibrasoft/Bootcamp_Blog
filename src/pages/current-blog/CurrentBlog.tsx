@@ -115,7 +115,7 @@ export default function CurrentBlog() {
                             {...settings}
                             className={CurrentBlogStyles.currentBlog_section_sliderContent_carousel}
                         >
-                            {similarBlogs.map((data) => (
+                            {similarBlogs.filter((blog) => id && parseInt(id) !== blog.id).map((data) => (
                                 <BlogCard
                                     type="small"
                                     key={data.id}
