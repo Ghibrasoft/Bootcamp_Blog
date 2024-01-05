@@ -36,7 +36,6 @@ const BlogCard: React.FC<IBlogCard> = ({ type, width, blogData, blogDataArray = 
         );
     };
 
-    console.log('card re-render')
     return (
         <>
             {blogData ? // if single

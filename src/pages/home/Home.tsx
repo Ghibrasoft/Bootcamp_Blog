@@ -37,7 +37,7 @@ export default function Home() {
     }
 
     useEffect(() => {
-        const fetchBlogs = async () => {
+        const fetchBlogs = () => {
             dispatch(getBlogs(token))
         }
         fetchBlogs();
