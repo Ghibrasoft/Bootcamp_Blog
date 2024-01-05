@@ -31,7 +31,7 @@ const getComponentStyles = (submittable: boolean) => {
 export default function AddBlog() {
     const [form] = Form.useForm();
     const dispatch = useAppDispatch();
-    const addedBlogData = useSelector(addBlogData)
+    const addedBlogData = useSelector(addBlogData);
     const categories = useSelector(categoriesData);
     const [openModal, setOpenModal] = useState(false);
 
@@ -94,7 +94,7 @@ export default function AddBlog() {
         author: 'var(--color-neutral-7)',
         title: 'var(--color-neutral-7)',
         description: 'var(--color-neutral-7)'
-    })
+    });
     useEffect(() => {
         form.validateFields({ validateOnly: true }).then(
             () => {
@@ -131,7 +131,7 @@ export default function AddBlog() {
             default:
                 break;
         }
-    }
+    };
     const onFinish = async (values: IFormDataProps) => {
         // console.log(values)
         try {
@@ -158,15 +158,13 @@ export default function AddBlog() {
         }
     };
     useEffect(() => {
-        localStorage.setItem("formValues", JSON.stringify(form.getFieldsValue()));
-    }, [values]);
-    useEffect(() => {
-        const savedFormValues = localStorage.getItem("formValues");
+        localStorage.setItem("formValue", JSON.stringify(form.getFieldsValue()));
 
+        const savedFormValues = localStorage.getItem("formValue");
         if (savedFormValues) {
             form.setFieldsValue(JSON.parse(savedFormValues));
         }
-    }, []);
+    }, [values, form]);
 
 
     return (

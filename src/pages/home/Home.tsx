@@ -17,7 +17,8 @@ export default function Home() {
     const blogsData = useSelector(blogs);
     const [checkedTitles, setCheckedTitles] = useState<string[]>([]);
     const currentDate = new Date();
-    const filteredBlogs = blogsData.data.filter((blog) =>
+    const filteredBlogsByDate = blogsData.data.filter((blog) => new Date(blog.publish_date) <= currentDate);
+    const filteredBlogsByCategory = blogsData.data.filter((blog) =>
         blog.categories.some((category) =>
             checkedTitles.some(
                 (categoryTitle) => categoryTitle === category.title
@@ -82,10 +83,10 @@ export default function Home() {
                         type="small"
                         width={'400px'}
                         blogDataArray={
-                            filteredBlogs.length === 0 ?
-                                blogsData.data.filter((blog) => new Date(blog.publish_date) <= currentDate)
+                            filteredBlogsByCategory.length === 0 ?
+                                filteredBlogsByDate
                                 :
-                                filteredBlogs
+                                filteredBlogsByCategory
                         }
                     />
                 </div>
