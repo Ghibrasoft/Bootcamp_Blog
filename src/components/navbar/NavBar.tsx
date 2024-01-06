@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import NavBarStyles from "./NavBar.module.scss";
 import { useAppDispatch } from "../../store/store";
 import { Link, useNavigate } from "react-router-dom";
+import { InfoCircleFilled } from "@ant-design/icons";
 import { loggedUser } from "../../store/selectors/login";
 import { Button, Form, Image, Input, Modal, Result } from "antd";
 import { loginUser } from "../../store/reducers/login/loginSlice";
@@ -111,12 +112,13 @@ const NavBar = () => {
                             validateTrigger="onBlur"
                             rules={[
                                 { required: true, message: '' },
-                                { type: 'email' },
-                                { whitespace: true }
+                                { type: 'email', message: 'არასწორი ელ-ფოსტის ფორმატი' },
+                                { whitespace: true },
                             ]}
                             help={userData.error &&
                                 <span style={{ color: 'var(--color-error)' }}>
-                                    {userData.error.message}
+                                    <InfoCircleFilled style={{ marginRight: 8 }} />
+                                    <span style={{ fontSize: 'var(--font-size-sm)' }}>ელ-ფოსტა არ მოიძებნა</span>
                                 </span>
                             }
                         >
