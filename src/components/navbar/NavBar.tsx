@@ -13,13 +13,17 @@ import { loginUser } from "../../store/reducers/login/loginSlice";
 const NavBar = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const userData = useSelector(loggedUser);
     const [modalForm] = Form.useForm();
+    const userData = useSelector(loggedUser);
     const [openModal, setOpenModal] = useState(false);
+    const addBlogLocation: boolean = window.location.pathname !== '/addblog';
 
     return (
-        <>
-            <div className={NavBarStyles.imageWrapper} onClick={() => navigate("/")}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: addBlogLocation ? 'space-between' : 'center' }}>
+            <div
+                className={NavBarStyles.imageWrapper}
+                onClick={() => navigate("/")}
+            >
                 <Image
                     preview={false}
                     src={brandLogo}
@@ -27,25 +31,29 @@ const NavBar = () => {
                     draggable={false}
                 />
             </div>
-            {userData.isLogged ?
-                <Link to={"/addblog"}>
+
+            {addBlogLocation ?
+                userData.isLogged ?
+                    <Link to={"/addblog"}>
+                        <Button
+                            size="large"
+                            type="primary"
+                            htmlType="button"
+                        >
+                            დაამატე ბლოგი
+                        </Button>
+                    </Link>
+                    :
                     <Button
                         size="large"
                         type="primary"
                         htmlType="button"
+                        onClick={() => setOpenModal(true)}
                     >
-                        დაამატე ბლოგი
+                        შესვლა
                     </Button>
-                </Link>
                 :
-                <Button
-                    size="large"
-                    type="primary"
-                    htmlType="button"
-                    onClick={() => setOpenModal(true)}
-                >
-                    შესვლა
-                </Button>
+                null
             }
 
             <Modal
@@ -111,7 +119,7 @@ const NavBar = () => {
                     </Form>
                 }
             </Modal>
-        </>
+        </div>
     )
 }
 

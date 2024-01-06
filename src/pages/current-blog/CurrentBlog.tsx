@@ -1,17 +1,17 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { useAppDispatch } from "../../store/store";
 import { blogs } from "../../store/selectors/blogs";
 import { token } from "../../utils/constants/token";
 import CurrentBlogStyles from "./CurrentBlog.module.scss";
-import { Button, Carousel, CarouselProps, Empty } from "antd";
-import { currentBlog } from "../../store/selectors/currentBlog";
+import { RootState, useAppDispatch } from "../../store/store";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { getBlogs } from "../../store/reducers/blogs/blogsSlice";
 import { useWindowWidth } from "../../utils/hooks/useWindowWidth";
 import BlogCard from "../../components/dynamic-blog-card/BlogCard";
+import { Button, Carousel, CarouselProps, Empty, Spin } from "antd";
 import { getCurrentBlog } from "../../store/reducers/current-blog/currentBlogSlice";
+import { currentBlog, selectSimilarBlogs } from "../../store/selectors/currentBlog";
 
 
 
@@ -22,13 +22,7 @@ export default function CurrentBlog() {
     const SLIDES_TO_SHOW = windowWidth <= 900 ? 1 : windowWidth <= 1280 ? 2 : 3
     const blogsData = useSelector(blogs);
     const currentBlogData = useSelector(currentBlog);
-    const similarBlogs = blogsData.data.filter((blog) =>
-        blog.categories.some((category) =>
-            currentBlogData.currentBlog.categories.some(
-                (currentCategory) => currentCategory.id === category.id
-            )
-        )
-    );
+    const similarBlogs = useSelector((state: RootState) => selectSimilarBlogs(state));
 
     const CustomPrevArrow: React.FC<any> = (props) => {
         return (
@@ -82,6 +76,34 @@ export default function CurrentBlog() {
         prevArrow: <CustomPrevArrow />,
         nextArrow: <CustomNextArrow />,
     }
+    const renderSimilarBlogsCarousel = () => {
+        if (similarBlogs.length > 1) {
+            return (
+                <>
+                    <h1 className={CurrentBlogStyles.currentBlog_section_sliderContent_title}>
+                        მსგავსი სტატიები
+                    </h1>
+                    <Carousel
+                        {...settings}
+                        className={CurrentBlogStyles.currentBlog_section_sliderContent_carousel}
+                    >
+                        {similarBlogs
+                            .filter((blog) => id && parseInt(id) !== blog.id)
+                            .map((data) => (
+                                <BlogCard
+                                    type="small"
+                                    key={data.id}
+                                    blogData={data}
+                                    width={'400px'}
+                                />
+                            ))}
+                    </Carousel>
+                </>
+            );
+        } else {
+            return <Empty description={<span>მსგავსი სტატიები არ მოიძებნა</span>} />;
+        }
+    };
 
     useEffect(() => {
         const fetchCurrentBlog = () => {
@@ -91,44 +113,28 @@ export default function CurrentBlog() {
         }
 
         fetchCurrentBlog();
-    }, []);
+    }, [id]);
 
     return (
         <section className={CurrentBlogStyles.currentBlog_section}>
-            {/* current blog */}
-            <div className={CurrentBlogStyles.currentBlog_section_blog}>
-                <BlogCard
-                    type="large"
-                    width={'700px'}
-                    blogData={currentBlogData.currentBlog}
+            <Spin spinning={currentBlogData.loading}>
+                {/* current blog */}
+                <div className={CurrentBlogStyles.currentBlog_section_blog}>
+                    <BlogCard
+                        type="large"
+                        width={'700px'}
+                        blogData={currentBlogData.currentBlog}
 
-                />
-            </div>
+                    />
+                </div>
+            </Spin>
 
             {/* similar blogs */}
-            <div className={CurrentBlogStyles.currentBlog_section_sliderContent}>
-
-                {similarBlogs.length > 1 ?
-                    <>
-                        <h1 className={CurrentBlogStyles.currentBlog_section_sliderContent_title}>მსგავსი სტატიები</h1>
-                        <Carousel
-                            {...settings}
-                            className={CurrentBlogStyles.currentBlog_section_sliderContent_carousel}
-                        >
-                            {similarBlogs.map((data) => (
-                                <BlogCard
-                                    type="small"
-                                    key={data.id}
-                                    blogData={data}
-                                    width={'400px'}
-                                />
-                            ))}
-                        </Carousel>
-                    </>
-                    :
-                    <Empty description={<span>მსგავსი სტატიები არ მოიძებნა</span>} />
-                }
-            </div>
+            <Spin spinning={blogsData.loading}>
+                <div className={CurrentBlogStyles.currentBlog_section_sliderContent}>
+                    {renderSimilarBlogsCarousel()}
+                </div>
+            </Spin>
         </section>
     )
 }

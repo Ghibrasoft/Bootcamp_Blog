@@ -1,12 +1,11 @@
 import uploadIcon from "/upload.svg";
-import arrowLeft from "/arrowLeft.svg";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import AddBlogStyles from "./AddBlog.module.scss";
 import { useAppDispatch } from "../../store/store";
 import { token } from "../../utils/constants/token";
-import { InfoCircleFilled } from "@ant-design/icons";
+import { InfoCircleFilled, LeftOutlined } from "@ant-design/icons";
 import { IFormDataProps } from "../../types/blogType";
 import { isGeorgian } from "../../utils/helpers/isGeorgian";
 import { addBlogData } from "../../store/selectors/addBlog";
@@ -22,7 +21,7 @@ import {
     Upload,
 } from 'antd';
 
-
+// for validate (success) color
 const getComponentStyles = (submittable: boolean) => {
     return {
         colorBgContainer: submittable ? '#F8FFF8' : 'var(--color-neutral-1)',
@@ -32,7 +31,7 @@ const getComponentStyles = (submittable: boolean) => {
 export default function AddBlog() {
     const [form] = Form.useForm();
     const dispatch = useAppDispatch();
-    const addedBlogData = useSelector(addBlogData)
+    const addedBlogData = useSelector(addBlogData);
     const categories = useSelector(categoriesData);
     const [openModal, setOpenModal] = useState(false);
 
@@ -88,6 +87,14 @@ export default function AddBlog() {
     // form functionality
     const [submittable, setSubmittable] = useState(false);
     const values = Form.useWatch([], form);
+    const authorVal = Form.useWatch('author', form);
+    const titleVal = Form.useWatch('title', form);
+    const descVal = Form.useWatch('description', form);
+    const [validationColor, setValidationColor] = useState({
+        author: 'var(--color-neutral-7)',
+        title: 'var(--color-neutral-7)',
+        description: 'var(--color-neutral-7)'
+    });
     useEffect(() => {
         form.validateFields({ validateOnly: true }).then(
             () => {
@@ -98,14 +105,6 @@ export default function AddBlog() {
             },
         );
     }, [values]);
-    const [validationColor, setValidationColor] = useState({
-        author: 'var(--color-neutral-7)',
-        title: 'var(--color-neutral-7)',
-        description: 'var(--color-neutral-7)'
-    })
-    const authorVal = Form.useWatch('author', form);
-    const titleVal = Form.useWatch('title', form);
-    const descVal = Form.useWatch('description', form);
     const onBlurHandler = (field: string) => {
         switch (field) {
             case 'author':
@@ -132,7 +131,7 @@ export default function AddBlog() {
             default:
                 break;
         }
-    }
+    };
     const onFinish = async (values: IFormDataProps) => {
         // console.log(values)
         try {
@@ -158,24 +157,28 @@ export default function AddBlog() {
             console.error("Error in onFinish:", error);
         }
     };
+    // useEffect(() => {
+    //     localStorage.setItem("formValue", JSON.stringify(form.getFieldsValue()));
+
+    //     const savedFormValues = localStorage.getItem("formValue");
+    //     if (savedFormValues) {
+    //         form.setFieldsValue(JSON.parse(savedFormValues));
+    //     }
+    // }, [values, form]);
 
 
     return (
         <section className={AddBlogStyles.addblog_section}>
-            <div
-                className={AddBlogStyles.addblog_section_arrowLeft}
-                onClick={() => history.back()}
-            >
-                <Image
-                    className={AddBlogStyles.addblog_section_arrowLeft_image}
-                    alt="arrow-left"
-                    src={arrowLeft}
-                    preview={false}
-                />
-            </div>
-
             <div className={AddBlogStyles.addblog_section_content}>
                 <div className={AddBlogStyles.addblog_section_content_title}>
+                    <Button
+                        className={AddBlogStyles.addblog_section_content_title_btn}
+                        size="large"
+                        type="default"
+                        shape="circle"
+                        icon={<LeftOutlined />}
+                        onClick={() => history.back()}
+                    />
                     <h1>ბლოგის დამატება</h1>
                 </div>
 
@@ -189,8 +192,8 @@ export default function AddBlog() {
                             }
                         }}>
                         <Form
-                            form={form}
                             className={AddBlogStyles.addblog_section_content_formWrapper_form}
+                            form={form}
                             name="add_blog"
                             layout="vertical"
                             onFinish={onFinish}

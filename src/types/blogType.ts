@@ -44,3 +44,11 @@ export interface IBlogCard {
   blogData?: IBlogProps;
   blogDataArray?: IBlogProps[];
 }
+
+// filter list
+export interface IFilterListProps {
+  id: number;
+  title: string;
+  color: string;
+  bgColor: string;
+}
