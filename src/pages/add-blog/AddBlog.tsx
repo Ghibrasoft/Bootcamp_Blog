@@ -331,7 +331,7 @@ export default function AddBlog() {
                                                 <div style={{
                                                     color: opt.text_color,
                                                     backgroundColor: opt.background_color,
-                                                    padding: '8px 16px',
+                                                    padding: 'var(--space-sm) var(--space-md)',
                                                     borderRadius: '30px',
                                                     width: 'fit-content',
                                                 }}>
@@ -357,7 +357,7 @@ export default function AddBlog() {
                                                 return Promise.reject(
                                                     <>
                                                         <InfoCircleFilled style={{ marginRight: 8 }} />
-                                                        <span style={{ fontSize: '12px' }}>მეილი უნდა მთავრდებოდეს @redberry.ge-ით</span>
+                                                        <span style={{ fontSize: 'var(--font-size-sm)' }}>მეილი უნდა მთავრდებოდეს @redberry.ge-ით</span>
                                                     </>);
                                             }
                                             return Promise.resolve();
