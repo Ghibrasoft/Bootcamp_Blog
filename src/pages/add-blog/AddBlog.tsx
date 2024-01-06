@@ -132,6 +132,22 @@ export default function AddBlog() {
                 break;
         }
     };
+    const onFormChange = () => {
+        const formValue = form.getFieldsValue();
+
+        // Omit publish_date from the form value
+        const { publish_date, ...formValuesWithoutDate } = formValue;
+
+        localStorage.setItem("formValue", JSON.stringify(formValuesWithoutDate));
+    };
+
+    useEffect(() => {
+        const savedFormValues = localStorage.getItem("formValue");
+        if (savedFormValues) {
+            const parsedValues = JSON.parse(savedFormValues);
+            form.setFieldsValue(parsedValues);
+        }
+    }, [form]);
     const onFinish = async (values: IFormDataProps) => {
         // console.log(values)
         try {
@@ -153,18 +169,12 @@ export default function AddBlog() {
 
             dispatch(addBlog({ formData, token }));
             setOpenModal(true);
+            form.resetFields();
+            localStorage.removeItem("formValue");
         } catch (error) {
             console.error("Error in onFinish:", error);
         }
     };
-    // useEffect(() => {
-    //     localStorage.setItem("formValue", JSON.stringify(form.getFieldsValue()));
-
-    //     const savedFormValues = localStorage.getItem("formValue");
-    //     if (savedFormValues) {
-    //         form.setFieldsValue(JSON.parse(savedFormValues));
-    //     }
-    // }, [values, form]);
 
 
     return (
@@ -197,6 +207,7 @@ export default function AddBlog() {
                             name="add_blog"
                             layout="vertical"
                             onFinish={onFinish}
+                            onValuesChange={onFormChange}
                         >
                             {/* upload photo */}
                             <Form.Item

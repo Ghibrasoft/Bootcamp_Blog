@@ -31,6 +31,17 @@
             gap: var(--space-md);
             margin: var(--space-md) auto;
 
+            h1 {
+                line-height: 1.7rem;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                height: 2.7em;
+                white-space: normal;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+            }
+
             &_categoryList {
                 display: flex;
                 align-items: center;
@@ -56,7 +67,7 @@
                     overflow: hidden;
                     text-overflow: ellipsis;
                     display: -webkit-box;
-                    max-height: 3em;
+                    height: 3em;
                     white-space: normal;
                     -webkit-line-clamp: 2;
                     -webkit-box-orient: vertical;
