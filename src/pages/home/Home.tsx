@@ -1,14 +1,14 @@
 import blogImg from "/blog.svg";
-import { Button, Image, Spin } from "antd";
 import { useSelector } from "react-redux";
+import { Button, Image, Spin } from "antd";
 import { useEffect, useState } from "react";
 import HomeStyles from "./Home.module.scss";
-import { useAppDispatch } from "../../store/store";
 import { token } from "../../utils/constants/token";
-import { blogs } from "../../store/selectors/blogs";
+import { RootState, useAppDispatch } from "../../store/store";
 import { getBlogs } from "../../store/reducers/blogs/blogsSlice";
 import BlogCard from "../../components/dynamic-blog-card/BlogCard";
 import { FILTER_LIST } from "../../utils/constants/filter-list/filterList";
+import { blogs, selectFilteredBlogsByCategory, selectFilteredBlogsByDate } from "../../store/selectors/blogs";
 
 
 
@@ -16,15 +16,10 @@ export default function Home() {
     const dispatch = useAppDispatch();
     const blogsData = useSelector(blogs);
     const [checkedTitles, setCheckedTitles] = useState<string[]>([]);
-    const currentDate = new Date();
-    const filteredBlogsByDate = blogsData.data.filter((blog) => new Date(blog.publish_date) <= currentDate);
-    const filteredBlogsByCategory = blogsData.data.filter((blog) =>
-        blog.categories.some((category) =>
-            checkedTitles.some(
-                (categoryTitle) => categoryTitle === category.title
-            )
-        ) &&
-        new Date(blog.publish_date) <= currentDate
+    const blogsFilteredByDate = useSelector((state: RootState) =>
+        selectFilteredBlogsByDate(state));
+    const blogsFilteredByCategory = useSelector((state: RootState) =>
+        selectFilteredBlogsByCategory(state, checkedTitles)
     );
 
     const handleFilterClick = (title: string) => {
@@ -83,10 +78,10 @@ export default function Home() {
                         type="small"
                         width={'400px'}
                         blogDataArray={
-                            filteredBlogsByCategory.length === 0 ?
-                                filteredBlogsByDate
+                            blogsFilteredByCategory.length === 0 ?
+                                blogsFilteredByDate
                                 :
-                                filteredBlogsByCategory
+                                blogsFilteredByCategory
                         }
                     />
                 </div>

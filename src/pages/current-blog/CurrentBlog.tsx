@@ -1,17 +1,17 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { RootState, useAppDispatch } from "../../store/store";
 import { blogs } from "../../store/selectors/blogs";
 import { token } from "../../utils/constants/token";
 import CurrentBlogStyles from "./CurrentBlog.module.scss";
-import { Button, Carousel, CarouselProps, Empty, Spin } from "antd";
-import { currentBlog, selectSimilarBlogs } from "../../store/selectors/currentBlog";
+import { RootState, useAppDispatch } from "../../store/store";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { getBlogs } from "../../store/reducers/blogs/blogsSlice";
 import { useWindowWidth } from "../../utils/hooks/useWindowWidth";
 import BlogCard from "../../components/dynamic-blog-card/BlogCard";
+import { Button, Carousel, CarouselProps, Empty, Spin } from "antd";
 import { getCurrentBlog } from "../../store/reducers/current-blog/currentBlogSlice";
+import { currentBlog, selectSimilarBlogs } from "../../store/selectors/currentBlog";
 
 
 
