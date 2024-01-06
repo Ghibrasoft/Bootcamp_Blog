@@ -4,7 +4,7 @@ import { createSelector } from "@reduxjs/toolkit";
 const currentBlog = (state: RootState) => state.getCurrentBlog;
 
 const selectSimilarBlogs = createSelector(
-  [currentBlog, (state: RootState) => state.getBlogs.data], // add other selectors if needed
+  [currentBlog, (state: RootState) => state.getBlogs.data],
   (currentBlog, blogsData) =>
     blogsData.filter((blog) =>
       blog.categories.some((category) =>

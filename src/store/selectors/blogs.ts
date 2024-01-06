@@ -2,21 +2,16 @@ import { RootState } from "../store";
 import { createSelector } from "@reduxjs/toolkit";
 
 const blogs = (state: RootState) => state.getBlogs;
-const selectCurrentDate = () => new Date();
 
-const selectFilteredBlogsByDate = createSelector(
-  [blogs, selectCurrentDate],
-  (blogs, currentDate) =>
-    blogs.data.filter((blog) => new Date(blog.publish_date) <= currentDate)
+const currentDate = new Date();
+
+const selectFilteredBlogsByDate = createSelector([blogs], (blogs) =>
+  blogs.data.filter((blog) => new Date(blog.publish_date) <= currentDate)
 );
 
 const selectFilteredBlogsByCategory = createSelector(
-  [
-    blogs,
-    selectCurrentDate,
-    (_: RootState, checkedTitles: string[]) => checkedTitles,
-  ],
-  (blogs, currentDate, checkedTitles) =>
+  [blogs, (_: RootState, checkedTitles: string[]) => checkedTitles],
+  (blogs, checkedTitles) =>
     blogs.data.filter(
       (blog) =>
         blog.categories.some((category) =>
