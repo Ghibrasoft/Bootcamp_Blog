@@ -135,7 +135,7 @@ export default function AddBlog() {
     const onFormChange = () => {
         const formValue = form.getFieldsValue();
 
-        // Omit publish_date from the form value
+        // omit publish_date from the form value
         const { publish_date, ...formValuesWithoutDate } = formValue;
 
         localStorage.setItem("formValue", JSON.stringify(formValuesWithoutDate));
