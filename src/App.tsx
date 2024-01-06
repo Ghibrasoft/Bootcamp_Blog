@@ -5,9 +5,9 @@ import Home from "./pages/home/Home";
 // import { RootState } from "./store/store";
 import AddBlog from "./pages/add-blog/AddBlog";
 import NavBar from "./components/navbar/NavBar";
+import { Route, Routes } from "react-router-dom";
 import LayoutStyles from "./layout/Layout.module.scss";
 import CurrentBlog from "./pages/current-blog/CurrentBlog";
-import { Route, Routes } from "react-router-dom";
 
 const { Header, Content } = Layout;
 

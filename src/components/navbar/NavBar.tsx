@@ -111,7 +111,7 @@ const NavBar = () => {
                             label="ელ-ფოსტა"
                             validateTrigger="onBlur"
                             rules={[
-                                { required: true, message: '' },
+                                { required: true, message: 'შეიყვანეთ ელ-ფოსტა' },
                                 { type: 'email', message: 'არასწორი ელ-ფოსტის ფორმატი' },
                                 { whitespace: true },
                             ]}
