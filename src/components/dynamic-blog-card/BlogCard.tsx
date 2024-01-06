@@ -1,9 +1,9 @@
 import { Card, Image } from "antd";
 import { Link, useParams } from "react-router-dom";
-import { IBlogCard, ICategories } from "../../types/blogType";
 import BlogCardStyles from "./BlogCard.module.scss";
 import { ArrowUpOutlined } from "@ant-design/icons";
 import { formatDate } from "../../utils/helpers/date";
+import { IBlogCard, ICategories } from "../../types/blogType";
 import { FILTER_LIST } from "../../utils/constants/filter-list/filterList";
 
 const { Meta } = Card;
@@ -147,5 +147,4 @@ const BlogCard: React.FC<IBlogCard> = ({ type, width, blogData, blogDataArray = 
         </>
     )
 }
-
-export default BlogCard
+export default BlogCard;

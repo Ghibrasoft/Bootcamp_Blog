@@ -34,7 +34,7 @@ export default function Home() {
 
     useEffect(() => {
         const fetchBlogs = () => {
-            dispatch(getBlogs(token))
+            dispatch(getBlogs(token));
         }
         fetchBlogs();
     }, []);

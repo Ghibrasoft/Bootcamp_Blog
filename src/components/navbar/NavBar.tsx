@@ -19,7 +19,13 @@ const NavBar = () => {
     const addBlogLocation: boolean = window.location.pathname !== '/addblog';
 
     return (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: addBlogLocation ? 'space-between' : 'center' }}>
+        <div
+            style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: addBlogLocation ? 'space-between' : 'center'
+            }}
+        >
             <div
                 className={NavBarStyles.imageWrapper}
                 onClick={() => navigate("/")}

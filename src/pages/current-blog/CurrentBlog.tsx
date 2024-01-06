@@ -6,7 +6,6 @@ import { token } from "../../utils/constants/token";
 import CurrentBlogStyles from "./CurrentBlog.module.scss";
 import { RootState, useAppDispatch } from "../../store/store";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-import { getBlogs } from "../../store/reducers/blogs/blogsSlice";
 import { useWindowWidth } from "../../utils/hooks/useWindowWidth";
 import BlogCard from "../../components/dynamic-blog-card/BlogCard";
 import { Button, Carousel, CarouselProps, Empty, Spin } from "antd";
@@ -109,7 +108,6 @@ export default function CurrentBlog() {
         const fetchCurrentBlog = () => {
             if (!id) return;
             dispatch(getCurrentBlog({ blogId: id, token }))
-            dispatch(getBlogs(token));
         }
 
         fetchCurrentBlog();
