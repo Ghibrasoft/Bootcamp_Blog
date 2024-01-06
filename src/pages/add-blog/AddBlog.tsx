@@ -157,14 +157,14 @@ export default function AddBlog() {
             console.error("Error in onFinish:", error);
         }
     };
-    useEffect(() => {
-        localStorage.setItem("formValue", JSON.stringify(form.getFieldsValue()));
+    // useEffect(() => {
+    //     localStorage.setItem("formValue", JSON.stringify(form.getFieldsValue()));
 
-        const savedFormValues = localStorage.getItem("formValue");
-        if (savedFormValues) {
-            form.setFieldsValue(JSON.parse(savedFormValues));
-        }
-    }, [values, form]);
+    //     const savedFormValues = localStorage.getItem("formValue");
+    //     if (savedFormValues) {
+    //         form.setFieldsValue(JSON.parse(savedFormValues));
+    //     }
+    // }, [values, form]);
 
 
     return (

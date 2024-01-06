@@ -22,7 +22,7 @@ export default function CurrentBlog() {
     const SLIDES_TO_SHOW = windowWidth <= 900 ? 1 : windowWidth <= 1280 ? 2 : 3
     const blogsData = useSelector(blogs);
     const currentBlogData = useSelector(currentBlog);
-    const similarBlogs = useSelector((state: RootState) => selectSimilarBlogs(state))
+    const similarBlogs = useSelector((state: RootState) => selectSimilarBlogs(state));
 
     const CustomPrevArrow: React.FC<any> = (props) => {
         return (
@@ -115,7 +115,6 @@ export default function CurrentBlog() {
         fetchCurrentBlog();
     }, [id]);
 
-    // console.log('Current Blog re-render');
     return (
         <section className={CurrentBlogStyles.currentBlog_section}>
             <Spin spinning={currentBlogData.loading}>
