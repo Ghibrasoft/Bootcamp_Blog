@@ -62,7 +62,10 @@ const BlogCard: React.FC<IBlogCard> = ({ type, width, blogData, blogDataArray = 
                                         {author}
                                     </p>
                                     <span>
-                                        {formatDate(publish_date ? publish_date : '')} &bull; {email}
+                                        {formatDate(publish_date ? publish_date : '')}
+                                        {email && (
+                                            <> &bull; {email}</>
+                                        )}
                                     </span>
                                 </div>
                             }
